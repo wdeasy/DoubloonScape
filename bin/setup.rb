@@ -8,7 +8,7 @@ $channel   = nil
 $owner     = nil
 $role      = nil
 $bot       = nil
-$hash 		 = [*('a'..'z'),*('0'..'9')].shuffle[0,6].join 
+$hash 		 = [*('a'..'z'),*('0'..'9')].shuffle[0,6].join
 
 def discord_credentials
 	puts "Enter your Discord Client ID:"
@@ -19,12 +19,12 @@ def discord_credentials
 end
 
 def write_yaml
-	hash = {'client_id' => $client_id, 
+	hash = {'client_id' => $client_id,
 		      'token'     => $token,
-		      'prefix'    => '!', 
-		      'server'    => $server, 
-		      'channel'   => $channel, 
-		      'owner'     => $owner, 
+		      'prefix'    => '!',
+		      'server'    => $server,
+		      'channel'   => $channel,
+		      'owner'     => $owner,
 		      'role'      => $role}
 
 	File.open("data/config.yaml","w") do |file|
@@ -49,7 +49,7 @@ while $bot == nil do
 
 		$bot.command(:setup, help_available: false) do |event, *args|
 			if args[0] == $hash
-				$hash 		 = [*('a'..'z'),*('0'..'9')].shuffle[0,6].join 
+				$hash 		 = [*('a'..'z'),*('0'..'9')].shuffle[0,6].join
 			  role = event.server.roles.find { |r| r.name.downcase.include? 'captain' }
 
 			  if role.nil?
@@ -61,7 +61,7 @@ while $bot == nil do
 				  puts "Channel: #{event.channel.name}\n"
 				  puts "Role: #{role.name}\n"
 				  puts "Owner: #{event.author.username}"
-				  
+
 				  puts "Is this information correct?"
 				  response = gets.chomp
 
@@ -75,7 +75,7 @@ while $bot == nil do
 					  	write_yaml
 					  	puts "Setup complete."
 					  	#$bot.stop
-					  	exit
+					  	break
 					  end
 					else
 						puts "New setup code: \"!setup #{$hash}\""

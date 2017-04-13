@@ -8,7 +8,7 @@ module Bot
         send_events(DOUBLOONSCAPE.do_turn)
         update_topic(DOUBLOONSCAPE.status)
       end
-      sleep 0.1	
+      sleep 0.1
     end
   end
 
@@ -23,8 +23,9 @@ module Bot
     else
       level = status[:level]
       gold  = status[:gold].floor.to_i
-      time  = status[:current]
+      time  = minutes(status[:current])
       ttl   = (((status[:next] / DOUBLOONSCAPE.amount) * DOUBLOONSCAPE.seconds)/60).ceil.to_i
+      ttl   = ttl >= 0 ? ttl : 0
       set_topic("Level: #{level} Gold: #{gold} Time as Captain: #{time} min. Next Level: #{ttl} min.")
     end
   end
@@ -62,7 +63,7 @@ module Bot
         when :level
           send_chat("#{value[:name]} has hit level #{value[:level]}!")
         when :record
-          send_chat("#{value[:name]} has broken their previous record of #{value[:record]} min. spent as Captain!")
+          send_chat("#{value[:name]} has broken their previous record of #{minutes(value[:record])} min. spent as Captain!")
         when :event
           unless value.empty?
             place = value[:place].upcase
@@ -91,7 +92,7 @@ module Bot
               mutineers = "#{value[:mutineers].join(", ")}"
               send_chat("#{mutineers} think #{value[:captain]} is unworthy of the wheel and have called for a mutiny!")
               if value[:success] == true
-                send_chat("The mutineers have overthrown the Captain!. #{value[:captain]} will spend the next #{DoubloonScape::BRIG_DURATION} mins in the brig.")    
+                send_chat("The mutineers have overthrown the Captain!. #{value[:captain]} will spend the next #{DoubloonScape::BRIG_DURATION} mins in the brig.")
               else
                 send_chat("#{value[:captain]} successfully held off the mutiny and secured Captain for the next #{DoubloonScape::WIN_TIME_ADDED} mins.")
               end
@@ -127,7 +128,11 @@ module Bot
             else
               send_chat("#{value[:captain]} narrowly escaped from #{value[:enemy]}!")
             end
-          end  
+          end
+        when :tailwind
+          unless value[:amount] == 1
+            send_chat("TAILWIND! #{value[:captain]} is catching up by #{value[:amount]}x!")
+          end
         end
       end
     end
@@ -157,7 +162,7 @@ module Bot
   end
 
   def self.reset_captain
-    id = DOUBLOONSCAPE.current_captain 
+    id = DOUBLOONSCAPE.current_captain
     unless id.nil?
       capn = get_member(id)
       if !capn.nil? && capn.status != :offline
@@ -166,5 +171,9 @@ module Bot
         grant_role(capn, role)
       end
     end
+  end
+
+  def self.minutes(seconds)
+    (seconds/60).floor.to_i
   end
 end

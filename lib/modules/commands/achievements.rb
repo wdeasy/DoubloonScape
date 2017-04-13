@@ -17,15 +17,14 @@ module Bot
             end
           end
 
-          begin 
+          begin
             puts "!achievements #{captain.landlubber_name}"
             event.send_message(stats.strip)
-            #event.respond stats.strip   
           rescue Exception => msg
             puts "Error while trying to display achievements."
-            puts msg            
+            puts msg
           end
-        end 
+        end
       end
     end
   end

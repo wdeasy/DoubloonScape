@@ -1,7 +1,7 @@
 module DoubloonScape
 	class Inventory
 		class Item
-			attr_reader :ilvl, :name, :description	
+			attr_reader :ilvl, :name, :description
 	  	def initialize(ilvl, slot, name, description)
 	  		@ilvl = ilvl
 	  		@slot = slot
@@ -12,8 +12,8 @@ module DoubloonScape
 	  ### end of item class
 
 	  def initialize
-	  	@common = Hash.new 
-	  	@unique = Array.new	  	
+	  	@common = Hash.new
+	  	@unique = Array.new
 	  	@inventory = Hash.new
 
 	  	load_commons
@@ -70,17 +70,17 @@ module DoubloonScape
 	  	#30
 	  	@unique.push({:level => 30, :slot => 'Main Hand', :name => "Seaweed Whip",            :description => "All out of tentacle whips. This'll have to do."})
 	  	@unique.push({:level => 30, :slot => 'Trinket',   :name => "Empowering 'I Refuse to Sink' Anchor Tattoo", :description => "The irony is lost on you."})
-	  	@unique.push({:level => 30, :slot => 'Chest',     :name => "Leathers of the Father",  :description => "Dad likes leather!"})	  		
+	  	@unique.push({:level => 30, :slot => 'Chest',     :name => "Leathers of the Father",  :description => "Dad likes leather!"})
 
 	  	#40
 	  	@unique.push({:level => 40, :slot => 'Hands',     :name => "Algae Fists",             :description => "Seemed like a good idea at the time."})
 	  	@unique.push({:level => 40, :slot => 'Pet',       :name => "Powder Monkey",           :description => "An Albino Capuchin."})
 	  	@unique.push({:level => 40, :slot => 'Trinket',   :name => "Pocket Submarine",        :description => "Clutch!"})
-	  		
+
 	  	#50
 	  	@unique.push({:level => 50, :slot => 'Pet',       :name => "Indebted Octopus",        :description => "You spared his life and now he owes you a favor."})
 	  	@unique.push({:level => 50, :slot => 'Trinket',   :name => "The Nautilus",            :description => "This mollusk always points north!"})
-	
+
 	  	#60
 	  	@unique.push({:level => 60, :slot => 'Main Hand', :name => "Barnacle-Covered Pegleg", :description => "Her name's Lucille."})
 	  	@unique.push({:level => 60, :slot => 'chest',     :name => "Rune\'s Cape",            :description => "Pilfered from a Swedish Nobleman."})
@@ -108,12 +108,12 @@ module DoubloonScape
 	  				  @inventory[slot] = Item.new(ilvl, slot, unique_item[:name], unique_item[:description])
 	  			  end
 	  			end
-	  			
+
 	  			if item.empty?
 	  				item = {:quality => :common, :name => @common[slot][:names].sample, :ilvl => ilvl }
 	  				@inventory[slot] = Item.new(ilvl, slot, item[:name], nil)
 	  			end
-	  		end 
+	  		end
 	  	end
 	  	return item
 	  end
@@ -130,10 +130,10 @@ module DoubloonScape
 	  	case battle[:enemy]
 	  	when 'Admiral Nelson'
 	  		battle[:item_name => 'Nelson\'s Folly', :item_description => 'Stolen from the Dreaded Rear Admiral himself.']
-	  		@inventory['Off Hand'] = Item.New(rand(200.300), 'Off Hand', battle[:item_name], battle[:item_description])
+	  		@inventory['Off Hand'] = Item.new(rand(200.300), 'Off Hand', battle[:item_name], battle[:item_description])
 	  	when 'The Kraken'
 	  		battle[:item_name => 'Tentacle Whip', :item_description => 'Fashioned from a dismembered Kraken limb.']
-	  		@inventory['Main Hand'] = Item.New(rand(200.300), 'Main Hand', battle[:item_name], battle[:item_description])
+	  		@inventory['Main Hand'] = Item.new(rand(200.300), 'Main Hand', battle[:item_name], battle[:item_description])
 	  	end
 	  	return battle
 	  end

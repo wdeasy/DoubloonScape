@@ -11,7 +11,8 @@ module Bot
           Bot.set_name(DOUBLOONSCAPE.current_captain, DOUBLOONSCAPE.current_name('landlubber'))
         end
         Bot.set_topic(nil)
-        BOT.game = nil        
+        BOT.game = nil
+        Thread.kill(GAME)
         exit
       end
     end

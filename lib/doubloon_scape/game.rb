@@ -9,7 +9,7 @@ module DoubloonScape
       @events = DoubloonScape::Event.new
 
       #captains
-      @captains = Hash.new  
+      @captains = Hash.new
       @cooldown = Time.now - seconds
 
       #past 5 captains
@@ -38,6 +38,9 @@ module DoubloonScape
       unless id.nil?
         update_captain(id)
         @captains[id].update_record
+        @captains[id].current = 0
+        @captains[id].offline = 0
+        @captains[id]
         save_captain(id)
       end
     end
@@ -68,7 +71,7 @@ module DoubloonScape
         firstplace = [165489755620900864]
         if firstplace.include? id
           @captains[id].achieves.add_value('firstplace', 1)
-        end        
+        end
         ############
       end
       @captains[id].update_name(name)
@@ -84,7 +87,7 @@ module DoubloonScape
 
       unless cur == pre
         #load or create the new captain
-        load_captain(cur, name)      
+        load_captain(cur, name)
         events[:contest] = contest_check(cur, pre)
 
         if events[:contest].empty? || events[:contest][:success] == false
@@ -106,13 +109,14 @@ module DoubloonScape
           #start new captain
           events[:bonus] = @captains[cur].bonus_check
           @captains[cur].time_started
-          @captains[cur].update_count     
+          @captains[cur].update_count
           events[:achieve] = @captains[cur].achieve_check
+          events[:tailwind] = tailwind_check(cur)
         end
       end
       return events
     end
- 
+
     def current_captain
       if @chain[-1].nil?
       	return nil
@@ -158,12 +162,12 @@ module DoubloonScape
         capns = Array.new
         @captains.each do |id, capn|
           capns.push(id)
-          @store[id] = capn        
+          @store[id] = capn
         end
         @store['captains'] = capns
         @store['chain']    = @chain
-        @store['treasure'] = @treasure           
-      end 
+        @store['treasure'] = @treasure
+      end
     end
 
     def load_captains
@@ -172,9 +176,9 @@ module DoubloonScape
         unless capns.nil?
           capns.each do |capn|
             @captains[capn] = @store[capn]
-            @captains[capn].achieves.load_realm_firsts 
+            @captains[capn].achieves.load_realm_firsts
             @captains[capn].last_update = Time.now
-            @captains[capn].update_record              
+            @captains[capn].update_record
           end
         end
         @chain = @store.fetch('chain', Array.new(50))
@@ -197,11 +201,11 @@ module DoubloonScape
       unless cur.nil?
         finish_captain(cur)
       end
-      save_captains     
+      save_captains
     end
 
     def amount
-      DoubloonScape::AMOUNT + @events.amount_modifier
+      (DoubloonScape::AMOUNT + @events.amount_modifier) * @captains[current_captain].tailwind
     end
 
     def seconds
@@ -218,7 +222,7 @@ module DoubloonScape
             @captains[id].give_gold(amount)
           end
           @captains[id].update_current(time)
-          @captains[id].update_total(time)      
+          @captains[id].update_total(time)
         end
         @captains[id].last_update = Time.now
         @captains[id].unlock
@@ -239,13 +243,16 @@ module DoubloonScape
             events[:treasure] = treasure_check(capn)
             events[:item] = @captains[capn].item_check
             events[:level] = @captains[capn].level_check
+            unless events[:level].nil?
+              tailwind_check(capn)
+            end
             events[:record] = @captains[capn].record_check
-            events[:achieve] = @captains[capn].achieve_check
           end
+          events[:achieve] = @captains[capn].achieve_check
           save_captain(capn)
         end
       end
-      return events        
+      return events
     end
 
     def denier_check(cur=current_captain, pre=previous_captain)
@@ -258,7 +265,7 @@ module DoubloonScape
       [10,20,50].each do |num|
         count = 0
         capns = Array.new
-        ((50-num)..49).each do |n|  
+        ((50-num)..49).each do |n|
           capn = @chain[n]
           unless capn.nil?
             unless capns.include? capn
@@ -293,7 +300,7 @@ module DoubloonScape
           if current_events.include? 'atlantis'
             @captains[cur].achieves.add_value('atlamuda', 1)
           end
-        end        
+        end
       end
       return event
     end
@@ -350,9 +357,9 @@ module DoubloonScape
             end
           when :duel
             amount = @captains[pre].next_level * DoubloonScape::DUEL_BONUS
-            @captains[pre].give_xp(amount)  
-            save_captain(pre)        
-          end  
+            @captains[pre].give_xp(amount)
+            save_captain(pre)
+          end
         else
           @cooldown = Time.now + DoubloonScape::WIN_TIME_ADDED.minutes
           @captains[cur].achieves.add_value(event, 1)
@@ -377,15 +384,15 @@ module DoubloonScape
       if rand(100) < DoubloonScape::PICKPOCKET_CHANCE && Time.now > @events.pickpocket_cooldown
         capns = online_captains(cur)
         rogue = capns.sample
-        unless capns.empty? 
+        unless capns.empty?
           pickpocket = @events.pickpocket(@captains[cur], @captains[rogue])
 
           if pickpocket[:success] == true
             @captains[cur].take_gold(pickpocket[:gold])
-            @captains[rogue].give_gold(pickpocket[:gold]) 
-            save_captain(rogue)         
+            @captains[rogue].give_gold(pickpocket[:gold])
+            save_captain(rogue)
           end
-        end        
+        end
       end
       return pickpocket
     end
@@ -399,7 +406,7 @@ module DoubloonScape
 
           if battle[:success] == true
             amount = @captains[cur].next_level * DoubloonScape::BATTLE_WIN_AMOUNT
-            @captains[cur].give_xp(amount) 
+            @captains[cur].give_xp(amount)
             @captains[cur].achieves.add_value(battle[:enemy], 1)
             if battle[:item] == true
               battle = @captains[cur].inv.battle_item(battle)
@@ -423,6 +430,25 @@ module DoubloonScape
       return treasure
     end
 
+    def tailwind_check(cur)
+      capns = @captains
+      levels = 0
+
+      capns.each do |id, capn|
+        levels += capn.level
+      end
+
+      avg = levels / capns.count
+
+      if @captains[cur].level < avg
+        @captains[cur].tailwind = DoubloonScape::TAILWIND_MULTIPLIER
+      else
+        @captains[cur].tailwind = 1
+      end
+
+      return {:captain => @captains[cur].landlubber_name, :amount => @captains[cur].tailwind}
+    end
+
     def status
       cur = current_captain
       if @paused == true
@@ -434,7 +460,7 @@ module DoubloonScape
       else
         capn = @captains[cur]
         return {:level => capn.level, :gold => capn.gold, :current => capn.current, :next => capn.next}
-      end 
+      end
     end
 
     def update_captains_status(statuses)
@@ -442,20 +468,20 @@ module DoubloonScape
       cpns = @captains
       unless cpns.nil?
         cpns.each do |capn_id, capn|
-          match = false
           statuses.each do |id, status|
             if capn_id == id
               if capn_id == cur && !cur.nil?
-                if capn.status == :online && status == :offline
-                  @captains[capn_id].achieves.add_value('deserter', 1)
+                if status == :offline
+                  @captains[capn_id].offline += 1
+                  if @captains[capn_id].offline == DoubloonScape::OFFLINE
+                    @captains[capn_id].achieves.add_value('deserter', 1)
+                  end
+                else
+                  @captains[capn_id].offline = 0
                 end
               end
-              match = true
               capn.status = status
-            end     
-          end
-          if match == false
-            capn.status = :offline
+            end
           end
         end
       end
@@ -479,26 +505,35 @@ module DoubloonScape
       sorted[:ilvl]   = ilvl.sort_by { |id, ilvl| ilvl }.reverse
       sorted[:gold]   = gold.sort_by { |id, gold| gold }.reverse
 
+      max = Hash.new
+      max[:level]     = level.max_by { |id, level| level }
+      max[:ilvl]      = ilvl.max_by { |id, ilvl| ilvl }
+      max[:gold]      = gold.max_by { |id, gold| gold }
+
       leaderboard = Hash.new
       capns.each do |id, capn|
         score = 0
-        sorted[:level].each_with_index do |(level_id, level), index|
+
+        sorted[:level].each do |level_id, level|
           if level_id == id
-            score += level*(10-index)*0.1
+            weighted_level = (max[:gold][1] * (level / max[:level][1])).floor.to_i
+            score += weighted_level
           end
         end
 
-        sorted[:ilvl].each_with_index do |(ilvl_id, ilvl), index|
+        sorted[:ilvl].each do |ilvl_id, ilvl|
           if ilvl_id == id
-            score += ilvl*(10-index)*0.1            
+            weighted_ilvl = (max[:gold][1] * (ilvl / max[:ilvl][1])).floor.to_i
+            score += weighted_ilvl
           end
         end
 
-        sorted[:gold].each_with_index do |(gold_id, gold), index|
+        sorted[:gold].each do |gold_id, gold|
           if gold_id == id
-            score += gold*(10-index)*0.1            
+            weighted_gold = (max[:gold][1] * (gold / max[:gold][1])).floor.to_i
+            score += weighted_gold
           end
-        end        
+        end
 
         if score < 0
           score = 0
@@ -506,14 +541,14 @@ module DoubloonScape
 
         leaderboard[capn.landlubber_name] = {:score => score.floor.to_i, :level => capn.level, :ilvl => capn.inv.ilvl, :gold => capn.gold}
       end
-      
+
       sorted_leaderboard = leaderboard.sort_by {|name, hash| hash[:score] }.reverse
       return sorted_leaderboard
     end
 
     #locks to try to stop weird things from happening
     #when i'm the captain now is being spammed
-    
+
     def lock
       @locked = true
     end

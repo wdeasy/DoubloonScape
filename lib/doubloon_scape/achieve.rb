@@ -130,7 +130,7 @@ module DoubloonScape
         if prop.tag == tag
           set_value(name, get_initial_value(name))
         end
-      end      
+      end
     end
 
     def realm_first_check(achievement)
@@ -252,7 +252,7 @@ module DoubloonScape
       #necro
       define_property('necro1', 0, ACTIVE_IF_GREATER_THAN, 0, 'necro')
       define_property('necro5', 0, ACTIVE_IF_GREATER_THAN, 4, 'necro')
-      define_property('necro25', 0, ACTIVE_IF_GREATER_THAN, 24, 'necro')      
+      define_property('necro25', 0, ACTIVE_IF_GREATER_THAN, 24, 'necro')
 
       #time of day
       define_property('midnight', 0, ACTIVE_IF_GREATER_THAN, 0, 'midnight')
@@ -302,13 +302,12 @@ module DoubloonScape
       define_property('queen', 0, ACTIVE_IF_GREATER_THAN, 0, 'The Queen Anne\'s Revenge')
       define_property('nelson', 0, ACTIVE_IF_GREATER_THAN, 0, 'Admiral Nelson')
 
-      #uncomment next season, will break current season
       #ilvl
-      #define_property('ilvl100', 0, ACTIVE_IF_GREATER_THAN, 99, 'ilvl')
-      #define_property('ilvl250', 0, ACTIVE_IF_GREATER_THAN, 249, 'ilvl')
-      #define_property('ilvl500', 0, ACTIVE_IF_GREATER_THAN, 499, 'ilvl')
-      #define_property('ilvl1000', 0, ACTIVE_IF_GREATER_THAN, 999, 'ilvl')
-      #define_property('ilvl2500', 0, ACTIVE_IF_GREATER_THAN, 2499, 'ilvl')
+      define_property('ilvl100', 0, ACTIVE_IF_GREATER_THAN, 99, 'ilvl')
+      define_property('ilvl250', 0, ACTIVE_IF_GREATER_THAN, 249, 'ilvl')
+      define_property('ilvl500', 0, ACTIVE_IF_GREATER_THAN, 499, 'ilvl')
+      define_property('ilvl1000', 0, ACTIVE_IF_GREATER_THAN, 999, 'ilvl')
+      define_property('ilvl2500', 0, ACTIVE_IF_GREATER_THAN, 2499, 'ilvl')
     end
 
     def load_achievements
@@ -374,7 +373,7 @@ module DoubloonScape
       #events
       define_achievement("ATLANTIS", "Discover Atlantis.", ['atlantis'], true)
       define_achievement("BERMUDA TRIANGLE", "Get lost in the Bermuda Triangle.", ['bermuda'], true)
-      define_achievement("THE PERFECT STORM", "Find Atlantis and the Bermuda Triangle at the same time.", ['atlamuda'], true)      
+      define_achievement("THE PERFECT STORM", "Find Atlantis and the Bermuda Triangle at the same time.", ['atlamuda'], true)
 
       #necro
       define_achievement("AWAKEN", "Steal the Captain from an offline player.", ['necro1'], true)
@@ -432,11 +431,11 @@ module DoubloonScape
 
       #uncomment next season, will break current season
       #ilvl
-      #define_achievement("CLAD", "Have an iLVL over 100.", ['ilvl100'], true)
-      #define_achievement("ARMED", "Have an iLVL over 250.", ['ilvl250'], true)
-      #define_achievement("SUITED", "Have an iLVL over 500.", ['ilvl500'], true)
-      #define_achievement("ADORNED", "Have an iLVL over 1000.", ['ilvl1000'], true)
-      #define_achievement("BEDECKED", "Have an iLVL over 2500.", ['ilvl2500'], true)
+      define_achievement("CLAD", "Have an iLVL over 100.", ['ilvl100'], true)
+      define_achievement("ARMED", "Have an iLVL over 250.", ['ilvl250'], true)
+      define_achievement("SUITED", "Have an iLVL over 500.", ['ilvl500'], true)
+      define_achievement("ADORNED", "Have an iLVL over 1000.", ['ilvl1000'], true)
+      define_achievement("BEDECKED", "Have an iLVL over 2500.", ['ilvl2500'], true)
     end
   end
 end

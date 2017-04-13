@@ -12,7 +12,7 @@ module Bot
         Bot.send_chat "Anchors Aweigh! DoubloonScape has begun!"
         puts "Bot connected."
         Bot.update_topic(DOUBLOONSCAPE.status)
-        Bot.game_loop
+        #Bot.game_loop
       end
     end
   end

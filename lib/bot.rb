@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'discordrb'
+require 'thread'
 require 'yaml'
 require_relative './doubloon_scape'
 
@@ -24,6 +25,15 @@ module Bot
   #create the game
   DOUBLOONSCAPE = DoubloonScape::Game.new
   DOUBLOONSCAPE.load_captains
+  Thread.abort_on_exception=true
+  begin
+    GAME = Thread.new {
+      Bot.game_loop
+    }
+  rescue Exception => msg
+    puts "Error in the game loop."
+    puts msg
+  end
 
   #bot commands
   module DiscordCommands; end

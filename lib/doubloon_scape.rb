@@ -27,6 +27,9 @@ module DoubloonScape
   BASE 		   = 10
   MULTIPLIER = 1.1
 
+  #how long to wait before being declared a deserter
+  OFFLINE            = 5 #minutes
+
   #events
   MUTINY_COOLDOWN    = 30  #minutes
   DUEL_COOLDOWN      = 30  #minutes
@@ -59,9 +62,12 @@ module DoubloonScape
 
   #new captain events
   CONTEST_CHANCE     = 10  #percent
-  WIN_TIME_ADDED     = 5   #minutes 
+  WIN_TIME_ADDED     = 5   #minutes
   BRIG_DURATION      = 5   #minutes
 
   #jackpot
   TREASURE_CHANCE    = 1   #out of 1000
+
+  #tailwind (catchup mechanic)
+  TAILWIND_MULTIPLIER = 2 
 end

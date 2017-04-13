@@ -9,8 +9,8 @@ module Bot
           stats += "`Level:                      #{captain.level}`\n"
           stats += "`Gold:                       #{captain.gold.floor.to_i}`\n"
           stats += "`Captains Taken:             #{captain.count}`\n"
-          stats += "`Longest Time as Captain:    #{captain.record}`\n"
-          stats += "`Total Minutes as Captain:   #{captain.total}`\n"
+          stats += "`Longest Time as Captain:    #{Bot.minutes(captain.record)}`\n"
+          stats += "`Total Minutes as Captain:   #{Bot.minutes(captain.total)}`\n"
 
           stats += "\n**Achievements [#{captain.achieves.count}]**\n"
 
@@ -19,14 +19,14 @@ module Bot
             stats += "`#{slot.ljust(10)} [#{item.ilvl}]#{item.name}`\n"
           end
 
-          begin 
+          begin
             puts "!stats #{captain.landlubber_name}"
-            event.respond stats.strip   
+            event.respond stats.strip
           rescue Exception => msg
             puts "Error while trying to display stats."
-            puts msg            
+            puts msg
           end
-        end 
+        end
       end
     end
   end

@@ -5,8 +5,8 @@ require 'time'
 
 module DoubloonScape
   class Captain
-    attr_accessor :status, :last_update
-    attr_reader :inv, :next_level, :xp, :id, :achieves, :level, :gold, :count, :locked
+    attr_accessor :status, :last_update, :offline, :current, :tailwind
+    attr_reader :inv, :next_level, :xp, :id, :achieves, :level, :gold, :count, :locked, :total
 
     def initialize(id)
       @id = id
@@ -26,6 +26,8 @@ module DoubloonScape
       @status = nil
       @locked = false
       @history = Array.new(60)
+      @offline = 0
+      @tailwind = 1
 
       #inventory
       @inv = DoubloonScape::Inventory.new
@@ -108,6 +110,7 @@ module DoubloonScape
       @start_time = Time.now
       @last_update = Time.now
       @current = 0
+      @offline = 0
       @achieves.reset_value('currents')
       rate_check
       time_check
@@ -131,7 +134,7 @@ module DoubloonScape
 
     def calc_level_up
       if @level > 60
-        @next_level = base_xp(@level) + (86400 * (@level - 60))
+        @next_level = base_xp(@level) + (1440 * (@level - 60))
       else
         @next_level = base_xp(@level)
       end
@@ -146,13 +149,13 @@ module DoubloonScape
         return {:name => @name, :level => @level}
       else
         return nil
-      end 
+      end
     end
 
     def record_check
       if @current > @record && @record != @previous && @record > 59
         @previous = @record
-        return {:name => @name, :record => minutes(@record)}
+        return {:name => @name, :record => @record}
       else
         return nil
       end
@@ -189,6 +192,7 @@ module DoubloonScape
             @achieves.add_value('pegleg', 1)
           end
         end
+        @achieves.set_value('ilvl', @ilvl)
       end
       return item
     end
@@ -197,24 +201,12 @@ module DoubloonScape
       @inv.ilvl
     end
 
-    def minutes(seconds)
-      (seconds/60).floor.to_i
-    end
-
     def record
       if @current > @record
-        return minutes(@current)
+        return @current
       else
-        return minutes(@record)
+        return @record
       end
-    end
-
-    def current
-      minutes(@current)
-    end
-
-    def total
-      minutes(@total)
     end
 
     def next

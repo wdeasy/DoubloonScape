@@ -12,6 +12,7 @@ module Bot
     begin
       member.remove_role role
     rescue Exception => msg
+      puts "Error revoking the Captain role."
       puts msg
     end
   end

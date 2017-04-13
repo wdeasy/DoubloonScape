@@ -49,7 +49,7 @@ module DoubloonScape
     end
 
     def time_modifier
-      if @bermuda_start.nil?
+      if @bermuda_end.nil?
         0
       else
         if @bermuda_modifier == :curse
@@ -61,7 +61,7 @@ module DoubloonScape
     end
 
     def amount_modifier
-      if @atlantis_start.nil?
+      if @atlantis_end.nil?
         0
       else
         @atlantis_amount * 0.01
@@ -79,14 +79,14 @@ module DoubloonScape
         @bermuda_start    = nil
         @bermuda_end      = nil
         @bermuda_modifier = nil
-        @bermuda_amount   = 0      
+        @bermuda_amount   = 0
     	end
-    	
-      if @atlantis_start.nil? || @bermuda_start.nil?
+
+      if @atlantis_end.nil? || @bermuda_end.nil?
         if rand(100) < DoubloonScape::ATLAMUDA_CHANCE
-          if !@atlantis_start.nil?
+          if !@atlantis_end.nil?
             place = 'bermuda triangle'
-          elsif !@bermuda_start.nil?
+          elsif !@bermuda_end.nil?
             place = 'atlantis'
           else
             place = rand(1) == 0 ? 'atlantis' : 'bermuda triangle'
@@ -113,7 +113,7 @@ module DoubloonScape
             @bermuda_modifier = modifier
             @bermuda_amount = amount
           end
-          
+
           event = {:place => place, :modifier => modifier, :unit => unit, :amount => amount }
         end
       end
@@ -182,7 +182,7 @@ module DoubloonScape
       if captains_roll < rogues_roll && captain.gold > 0
         succeed = true
         gold = (captain.gold * DoubloonScape::PICKPOCKET_AMOUNT).ceil.to_i
-        gold = gold > DoubloonScape::PICKPOCKET_MAX ? ((DoubloonScape::PICKPOCKET_MAX - 10) + rand(10)) : gold
+        #gold = gold > DoubloonScape::PICKPOCKET_MAX ? ((DoubloonScape::PICKPOCKET_MAX - 10) + rand(10)) : gold
       end
 
       return {:success => succeed, :captain => captain.landlubber_name, :rogue => rogue.landlubber_name, :gold => gold}
