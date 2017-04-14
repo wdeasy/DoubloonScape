@@ -192,7 +192,7 @@ module DoubloonScape
             @achieves.add_value('pegleg', 1)
           end
         end
-        @achieves.set_value('ilvl', @ilvl)
+        @achieves.set_values('ilvl', @ilvl)
       end
       return item
     end
