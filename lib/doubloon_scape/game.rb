@@ -516,21 +516,21 @@ module DoubloonScape
 
         sorted[:level].each do |level_id, level|
           if level_id == id
-            weighted_level = (max[:gold][1] * (level / max[:level][1])).floor.to_i
+            weighted_level = (max[:gold][1] * (level / max[:level][1]))
             score += weighted_level
           end
         end
 
         sorted[:ilvl].each do |ilvl_id, ilvl|
           if ilvl_id == id
-            weighted_ilvl = (max[:gold][1] * (ilvl / max[:ilvl][1])).floor.to_i
+            weighted_ilvl = (max[:gold][1] * (ilvl / max[:ilvl][1]))
             score += weighted_ilvl
           end
         end
 
         sorted[:gold].each do |gold_id, gold|
           if gold_id == id
-            weighted_gold = (max[:gold][1] * (gold / max[:gold][1])).floor.to_i
+            weighted_gold = (max[:gold][1] * (gold / max[:gold][1]))
             score += weighted_gold
           end
         end
