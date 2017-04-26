@@ -39,8 +39,7 @@ module DoubloonScape
 
   PICKPOCKET_COOLDOWN = 30 #minutes
   PICKPOCKET_CHANCE  = 1   #percent
-  PICKPOCKET_MAX     = 100
-  PICKPOCKET_AMOUNT  = 0.1 #percent
+  PICKPOCKET_MAX     = 0.1 #percent
   BATTLE_COOLDOWN    = 30  #minutes
   BATTLE_CHANCE      = 1   #percent
   BATTLE_WIN_AMOUNT  = 0.1 #percent
@@ -69,5 +68,5 @@ module DoubloonScape
   TREASURE_CHANCE    = 1   #out of 1000
 
   #tailwind (catchup mechanic)
-  TAILWIND_MULTIPLIER = 2 
+  TAILWIND_MULTIPLIER = 2
 end

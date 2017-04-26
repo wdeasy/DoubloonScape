@@ -180,9 +180,10 @@ module DoubloonScape
       gold = 0
 
       if captains_roll < rogues_roll && captain.gold > 0
-        succeed = true
-        gold = (captain.gold * DoubloonScape::PICKPOCKET_AMOUNT).ceil.to_i
-        #gold = gold > DoubloonScape::PICKPOCKET_MAX ? ((DoubloonScape::PICKPOCKET_MAX - 10) + rand(10)) : gold
+        gold = rand((captain.gold * DoubloonScape::PICKPOCKET_MAX).ceil.to_i)
+        if gold > 0
+          succeed = true
+        end
       end
 
       return {:success => succeed, :captain => captain.landlubber_name, :rogue => rogue.landlubber_name, :gold => gold}
