@@ -137,7 +137,7 @@ module Bot
             end
           end
         when :tailwind
-          unless value[:amount] == 1
+          unless value[:amount] == DoubloonScape::TAILWIND_MULTIPLIER
             send_chat("TAILWIND! #{value[:captain]} is catching up by #{value[:amount]}x!")
           end
         when :ghost

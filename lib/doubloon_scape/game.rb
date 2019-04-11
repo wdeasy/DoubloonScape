@@ -498,8 +498,13 @@ module DoubloonScape
         level[id]  = capn.level
       end
 
-      sorted[:level]  = level.sort_by { |id, level| level }.reverse
-      amount = (sorted.find_index(capns[cur])+1) * DoubloonScape::TAILWIND_MULTIPLIER
+      sorted = level.sort_by { |id, level| level }.reverse
+      if level.count < 2
+        amount = DoubloonScape::TAILWIND_MULTIPLIER
+      else
+        amount = (sorted.find_index(capns[cur])+1) * DoubloonScape::TAILWIND_MULTIPLIER
+      end
+
       return {:captain => @captains[cur].landlubber_name, :amount => amount}
     end
 
