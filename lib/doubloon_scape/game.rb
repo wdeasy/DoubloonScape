@@ -103,19 +103,20 @@ module DoubloonScape
           @chain.shift
 
           #ghost_captain
-          if @captains[pre].status == :offline
-            events[:ghost] = ghost_captain(@captains[pre], @captains[cur])
-            @captains[cur].achieves.add_value('necro', 1)
-          end
-
-          #save old captain
-          finish_captain(pre)
-
-          #achievement checks
           unless pre.nil?
+            if @captains[pre].status == :offline
+              events[:ghost] = ghost_captain(@captains[pre], @captains[cur])
+              @captains[cur].achieves.add_value('necro', 1)
+            end
+
+            #save old captain
+            finish_captain(pre)
+
+            #achievement checks
             denier_check(cur, pre)
-            chain_check(cur)
           end
+          chain_check(cur)
+
 
           #start new captain
           events[:bonus] = @captains[cur].bonus_check
