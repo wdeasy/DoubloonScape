@@ -25,16 +25,8 @@ module Bot
   #create the game
   DOUBLOONSCAPE = DoubloonScape::Game.new
   DOUBLOONSCAPE.load_captains
-  Thread.abort_on_exception=true
-  begin
-    GAME = Thread.new {
-      Bot.game_loop
-    }
-  rescue Exception => msg
-    puts "Error in the game loop."
-    puts msg
-  end
-
+  $loop = nil
+    
   #bot commands
   module DiscordCommands; end
   Dir['lib/modules/commands/*.rb'].each { |mod| load mod }

@@ -12,7 +12,19 @@ module Bot
         Bot.send_chat "Anchors Aweigh! DoubloonScape has begun!"
         puts "Bot connected."
         Bot.update_topic(DOUBLOONSCAPE.status)
-        #Bot.game_loop
+
+        Thread.abort_on_exception=true
+        if $loop.nil? || !$loop.alive?
+          begin
+            GAME = Thread.new {
+              Bot.game_loop
+            }
+          rescue Exception => msg
+            puts "Error in the game loop."
+            puts msg
+          end
+        end
+
       end
     end
   end
