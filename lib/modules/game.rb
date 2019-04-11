@@ -1,12 +1,19 @@
 module Bot
   def self.game_loop
     last_tick = Time.now
+    disc_count = 0
     while true do
       if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false
         last_tick += DOUBLOONSCAPE.seconds
-        DOUBLOONSCAPE.update_captains_status(get_members_status)
-        send_events(DOUBLOONSCAPE.do_turn)
-        update_topic(DOUBLOONSCAPE.status)
+        if BOT.connected?
+          DOUBLOONSCAPE.update_captains_status(get_members_status)
+          send_events(DOUBLOONSCAPE.do_turn)
+          update_topic(DOUBLOONSCAPE.status)
+          disc_count = 0
+        else
+          disc_count+=1
+          puts "Skipping tick. Bot is not connected. #{disc_count}"
+        end
       end
       sleep 0.1
     end
