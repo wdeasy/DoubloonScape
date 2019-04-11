@@ -92,7 +92,9 @@ module DoubloonScape
       unless cur == pre
         #load or create the new captain
         load_captain(cur, name)
-        unless pre.nil?
+        if pre.nil?
+          events[:contest] = []
+        else
           events[:contest] = contest_check(cur, pre)
         end
 
