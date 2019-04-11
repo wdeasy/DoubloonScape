@@ -29,7 +29,7 @@ module DoubloonScape
       @history = Array.new(60)
       @offline = 0
       @tailwind = 1
-      @last_pickpocket = Time.now - DoubloonScape::PICKPOCKET_COOLDOWN.minutes
+      @last_pickpocket = Time.now - DoubloonScape::GLOBAL_PICKPOCKET_COOLDOWN.minutes
 
       #inventory
       @inv = DoubloonScape::Inventory.new
