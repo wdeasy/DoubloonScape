@@ -37,9 +37,9 @@ module DoubloonScape
   MUTINEER_BONUS     = 0.1 #percent awarded to mutineers if they win
   DUEL_BONUS         = 0.1 #percent
 
-  PICKPOCKET_COOLDOWN = 30 #minutes
+  GLOBAL_PICKPOCKET_COOLDOWN   = 60 #minutes
+  PERSONAL_PICKPOCKET_COOLDOWN = 60 #minutes
   PICKPOCKET_CHANCE  = 1   #percent
-  PICKPOCKET_MAX     = 0.1 #percent
   BATTLE_COOLDOWN    = 30  #minutes
   BATTLE_CHANCE      = 1   #percent
   BATTLE_WIN_AMOUNT  = 0.1 #percent
@@ -68,5 +68,5 @@ module DoubloonScape
   TREASURE_CHANCE    = 1   #out of 1000
 
   #tailwind (catchup mechanic)
-  TAILWIND_MULTIPLIER = 2
+  TAILWIND_MULTIPLIER = 1
 end

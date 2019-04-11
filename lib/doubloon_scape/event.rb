@@ -33,8 +33,15 @@ module DoubloonScape
       @last_battle + DoubloonScape::BATTLE_COOLDOWN.minutes
     end
 
-    def pickpocket_cooldown
-      @last_pickpocket + DoubloonScape::PICKPOCKET_COOLDOWN.minutes
+    def pickpocket_cooldown(last_personal)
+      personal = last_personal + DoubloonScape::PERSONAL_PICKPOCKET_COOLDOWN.minutes
+      global = @last_pickpocket + DoubloonScape::GLOBAL_PICKPOCKET_COOLDOWN.minutes
+
+      if personal > global
+        personal
+      else
+        global
+      end
     end
 
     def current_events
@@ -179,14 +186,12 @@ module DoubloonScape
       succeed = false
       gold = 0
 
-      if captains_roll < rogues_roll && captain.gold > 0
-        gold = rand((captain.gold * DoubloonScape::PICKPOCKET_MAX).ceil.to_i)
-        if gold > 0
-          succeed = true
-        end
+      if captains_roll < rogues_roll && captain.current_gold > 0
+        succeed = true
+        captain.last_pickpocket = Time.now
       end
 
-      return {:success => succeed, :captain => captain.landlubber_name, :rogue => rogue.landlubber_name, :gold => gold}
+      return {:success => succeed, :captain => captain.landlubber_name, :rogue => rogue.landlubber_name, :gold => captain.current_gold}
     end
   end
 end

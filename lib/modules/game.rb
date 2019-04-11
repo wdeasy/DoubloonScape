@@ -133,6 +133,18 @@ module Bot
           unless value[:amount] == 1
             send_chat("TAILWIND! #{value[:captain]} is catching up by #{value[:amount]}x!")
           end
+        when :ghost
+          unless value.empty?
+            send_chat("GHOST CAPTAIN! #{value[:captain]} swindles #{value[:ghost]} out of #{value[:amount]} gold!")
+          end
+        when :high_seas
+          unless value.empty?
+            if value[:high_seas] == true
+              send_chat("HIGH SEAS!")
+            else
+              send_chat("CALM WATERS!")
+            end
+          end
         end
       end
     end

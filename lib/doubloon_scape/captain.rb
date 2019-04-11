@@ -5,7 +5,7 @@ require 'time'
 
 module DoubloonScape
   class Captain
-    attr_accessor :status, :last_update, :offline, :current, :tailwind
+    attr_accessor :status, :last_update, :offline, :current, :tailwind, :current_gold, :last_pickpocket
     attr_reader :inv, :next_level, :xp, :id, :achieves, :level, :gold, :count, :locked, :total
 
     def initialize(id)
@@ -19,6 +19,7 @@ module DoubloonScape
       @start_time = nil
       @last_update = Time.now
       @current = 0
+      @current_gold = 0
       @total = 0
       @record = 0
       @previous = 0
@@ -28,6 +29,7 @@ module DoubloonScape
       @history = Array.new(60)
       @offline = 0
       @tailwind = 1
+      @last_pickpocket = Time.now - DoubloonScape::PICKPOCKET_COOLDOWN.minutes
 
       #inventory
       @inv = DoubloonScape::Inventory.new
@@ -59,11 +61,13 @@ module DoubloonScape
 
     def give_gold(amount)
       @gold += amount
+      @current_gold += amount
       @achieves.set_values('gold', @gold.floor.to_i)
     end
 
     def take_gold(amount)
       @gold -= amount
+      @current_gold -= amount
       @achieves.set_values('gold', @gold.floor.to_i)
     end
 
@@ -110,6 +114,7 @@ module DoubloonScape
       @start_time = Time.now
       @last_update = Time.now
       @current = 0
+      @current_gold = 0
       @offline = 0
       @achieves.reset_value('currents')
       rate_check
