@@ -18,7 +18,7 @@ module DoubloonScape
       @last_duel = Time.now - DoubloonScape::DUEL_COOLDOWN.minutes
 
       @last_battle = Time.now - DoubloonScape::BATTLE_COOLDOWN.minutes
-      @last_pickpocket = Time.now - DoubloonScape::PICKPOCKET_COOLDOWN.minutes
+      @last_pickpocket = Time.now - DoubloonScape::GLOBAL_PICKPOCKET_COOLDOWN.minutes
   	end
 
     def mutiny_cooldown

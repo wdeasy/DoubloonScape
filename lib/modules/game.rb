@@ -12,7 +12,7 @@ module Bot
           disc_count = 0
         else
           disc_count+=1
-          puts "Skipping tick. Bot is not connected. #{disc_count}"
+          puts "Skipping tick. Bot is disconnected. [#{disc_count}]"
         end
       end
       sleep 0.1
