@@ -12,7 +12,7 @@ module Bot
         end
         Bot.set_topic(nil)
         BOT.game = nil
-        Thread.kill(GAME)
+        Thread.kill($game)
         exit
       end
     end

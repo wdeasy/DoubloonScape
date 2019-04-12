@@ -433,14 +433,19 @@ module DoubloonScape
     def tailwind_check(cur)
       capns = @captains
       levels = 0
+      top = 0
 
       capns.each do |id, capn|
         levels += capn.level
+
+        if capn.level > top 
+          top = capn.level
+        end
       end
 
       avg = levels / capns.count
 
-      if @captains[cur].level < avg
+      if @captains[cur].level < avg && @captains[cur].level < top
         @captains[cur].tailwind = DoubloonScape::TAILWIND_MULTIPLIER
       else
         @captains[cur].tailwind = 1
@@ -512,7 +517,7 @@ module DoubloonScape
 
       leaderboard = Hash.new
       capns.each do |id, capn|
-        score = 0
+        score = 0.to_f
 
         sorted[:level].each do |level_id, level|
           if level_id == id
@@ -536,7 +541,7 @@ module DoubloonScape
         end
 
         if score < 0
-          score = 0
+          score = 0.to_f
         end
 
         leaderboard[capn.landlubber_name] = {:score => score.floor.to_i, :level => capn.level, :ilvl => capn.inv.ilvl, :gold => capn.gold}

@@ -14,9 +14,9 @@ module Bot
         Bot.update_topic(DOUBLOONSCAPE.status)
 
         Thread.abort_on_exception=true
-        if $loop.nil? || !$loop.alive?
+        if $game.nil? || !$game.alive?
           begin
-            GAME = Thread.new {
+            $game = Thread.new {
               Bot.game_loop
             }
           rescue Exception => msg

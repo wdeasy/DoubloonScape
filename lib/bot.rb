@@ -25,8 +25,8 @@ module Bot
   #create the game
   DOUBLOONSCAPE = DoubloonScape::Game.new
   DOUBLOONSCAPE.load_captains
-  $loop = nil
-    
+  $game = nil
+
   #bot commands
   module DiscordCommands; end
   Dir['lib/modules/commands/*.rb'].each { |mod| load mod }
