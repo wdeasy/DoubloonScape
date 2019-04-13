@@ -5,6 +5,7 @@ module Bot
       command(:exit, help_available: false) do |event|
         break unless event.user.id == CONFIG.owner
         Bot.send_chat("The ship is goin down!")
+        Thread.kill($game)
         DOUBLOONSCAPE.stop
         Bot.remove_captains
         unless DOUBLOONSCAPE.current_captain.nil?
@@ -12,7 +13,6 @@ module Bot
         end
         Bot.set_topic(nil)
         BOT.game = nil
-        Thread.kill($game)
         exit
       end
     end
