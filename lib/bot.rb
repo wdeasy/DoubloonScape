@@ -67,7 +67,7 @@ module Bot
           }
         end
         sleep 1
-      }
+      end
     }
   rescue Exception => msg
     puts "Error in the time loop."
