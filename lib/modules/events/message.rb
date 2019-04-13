@@ -2,7 +2,7 @@ module Bot
   module DiscordEvents
     module Message
       extend Discordrb::EventContainer
-      phrase = /\b[Ii]'?[Mm][ \t]+[Tt][Hh][Ee][ \t]+[Cc][Aa][Pp][Tt][Aa][Ii][Nn][ \t]+[Nn][Oo][Ww].?\b/
+      phrase = /\b[Ii]['’]?[Mm][ \t]+[Tt][Hh][Ee][ \t]+[Cc][Aa][Pp][Tt][Aa][Ii][Nn][ \t]+[Nn][Oo][Ww].?\b/
       message(contains: phrase) do |event|
         unless Bot.is_legit(event) == false
           if Time.now < DOUBLOONSCAPE.cooldown

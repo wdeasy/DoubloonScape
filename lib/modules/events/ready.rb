@@ -17,6 +17,7 @@ module Bot
         if $game.nil? || !$game.alive?
           begin
             $game = Thread.new {
+              $game_time = Time.now
               Bot.game_loop
             }
           rescue Exception => msg

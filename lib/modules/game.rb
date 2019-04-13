@@ -4,7 +4,7 @@ module Bot
     disc_count = 0
     while true do
       if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false
-        last_tick += DOUBLOONSCAPE.seconds
+        last_tick = Time.now
         if BOT.connected?
           DOUBLOONSCAPE.update_captains_status(get_members_status)
           send_events(DOUBLOONSCAPE.do_turn)
