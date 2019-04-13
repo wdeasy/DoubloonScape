@@ -50,7 +50,7 @@ module Bot
 
   begin
     $time = Thread.new {
-      while true do {
+      while true do
         if Time.now - $game_time > 1.hour
           puts "restarting loop"
           if $game.nil?
