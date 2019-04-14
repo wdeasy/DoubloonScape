@@ -26,7 +26,11 @@ module Bot
   DOUBLOONSCAPE = DoubloonScape::Game.new
   DOUBLOONSCAPE.load_captains
   $game = nil
-  $game_time = nil
+  $exit = false
+
+  #config
+  STDOUT.sync = true
+  Thread.abort_on_exception=true
 
   #bot commands
   module DiscordCommands; end

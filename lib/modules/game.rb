@@ -3,6 +3,7 @@ module Bot
     last_tick = Time.now
     disc_count = 0
     while true do
+      Thread.stop if $exit
       if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false
         last_tick = Time.now
         if BOT.connected?

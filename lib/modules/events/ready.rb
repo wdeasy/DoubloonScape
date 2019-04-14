@@ -13,11 +13,10 @@ module Bot
         Bot.log "Bot connected."
         Bot.update_topic(DOUBLOONSCAPE.status)
 
-        Thread.abort_on_exception=true
         if $game.nil? || !$game.alive?
           begin
+            $exit = false
             $game = Thread.new {
-              $game_time = Time.now
               Bot.game_loop
             }
           rescue Exception => msg

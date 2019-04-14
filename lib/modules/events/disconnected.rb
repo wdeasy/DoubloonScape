@@ -5,9 +5,7 @@ module Bot
       disconnected do |event|
       	Bot.log "Bot disconnected."
         DOUBLOONSCAPE.stop
-        unless $game.nil?
-          Thread.kill($game)
-        end
+        $exit = true
       end
     end
   end

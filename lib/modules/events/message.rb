@@ -4,6 +4,7 @@ module Bot
       extend Discordrb::EventContainer
       phrase = /\b[Ii]['’]?[Mm][ \t]+[Tt][Hh][Ee][ \t]+[Cc][Aa][Pp][Tt][Aa][Ii][Nn][ \t]+[Nn][Oo][Ww].?\b/
       message(contains: phrase) do |event|
+        Bot.log "#{event.author.username}: #{event.content}"
         unless Bot.is_legit(event) == false
           if Time.now < DOUBLOONSCAPE.cooldown
             seconds = (DOUBLOONSCAPE.cooldown - Time.now).ceil
@@ -21,7 +22,6 @@ module Bot
                     Bot.update_names
                     Bot.update_topic(DOUBLOONSCAPE.status)
                     BOT.game = DOUBLOONSCAPE.current_name('landlubber')
-                    Bot.log "#{DOUBLOONSCAPE.current_name('landlubber')} has taken Captain."
                   end
                 end
                 Bot.send_events(game_events)

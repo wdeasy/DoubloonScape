@@ -11,7 +11,7 @@ module Bot
 
   def self.send_chat(message)
     begin
-      Bot.log message
+      #Bot.log message
       BOT.channel(CONFIG.channel).send_message("`#{message}`")
     rescue Exception => msg
       Bot.log "Error while trying to send message to channel to:"
