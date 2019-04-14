@@ -3,7 +3,7 @@ module Bot
     module Heartbeat
       extend Discordrb::EventContainer
       heartbeat do |event|
-      	DOUBLOONSCAPE.start
+      	#DOUBLOONSCAPE.start
       end
     end
   end

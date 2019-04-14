@@ -47,30 +47,4 @@ module Bot
 
   #run
   BOT.run
-
-  begin
-    $time = Thread.new {
-      while true do
-        if Time.now - $game_time > 1.hour
-          puts "restarting loop"
-          if $game.nil?
-            puts "game thread is null"
-          else
-            DOUBLOONSCAPE.stop
-            Thread.kill($game)
-          end
-
-          DOUBLOONSCAPE.start
-          $game = Thread.new {
-            $game_time = Time.now
-            Bot.game_loop
-          }
-        end
-        sleep 1
-      end
-    }
-  rescue Exception => msg
-    puts "Error in the time loop."
-    puts msg
-  end
 end

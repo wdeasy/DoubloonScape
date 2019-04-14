@@ -10,9 +10,13 @@ module Bot
           send_events(DOUBLOONSCAPE.do_turn)
           update_topic(DOUBLOONSCAPE.status)
           disc_count = 0
+
+          if Time.now.min.zero?
+            Bot.log "Time elapsed #{Time.now - last_tick} seconds."
+          end
         else
           disc_count+=1
-          puts "Skipping tick. Bot is disconnected. [#{disc_count}]"
+          Bot.log "Skipping tick. Bot is disconnected. [#{disc_count}]"
         end
       end
       sleep 0.1
@@ -182,5 +186,9 @@ module Bot
 
   def self.minutes(seconds)
     (seconds/60).floor.to_i
+  end
+
+  def self.log(message)
+    puts "[#{Time.now.strftime("%d/%m/%y %H:%M:%S")}] -- #{message}"
   end
 end

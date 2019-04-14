@@ -3,7 +3,7 @@ module Bot
     begin
       member.add_role role
     rescue Exception => msg
-      puts "Error granting Captain Role to the new captain."
+      Bot.log "Error granting Captain Role to the new captain."
       puts msg
     end
   end
@@ -12,7 +12,7 @@ module Bot
     begin
       member.remove_role role
     rescue Exception => msg
-      puts "Error revoking the Captain role."
+      Bot.log "Error revoking the Captain role."
       puts msg
     end
   end
@@ -22,7 +22,7 @@ module Bot
     begin
       role = BOT.server(CONFIG.server).roles.find { |r| r.id == CONFIG.role }
     rescue Exception => msg
-      puts "Error while searching for the Captain Role object."
+      Bot.log "Error while searching for the Captain Role object."
       puts msg
     end
     return role
@@ -33,7 +33,7 @@ module Bot
     begin
       role = BOT.server(CONFIG.server).roles.find { |r| r.name.downcase.include? 'captain' }
     rescue Exception => msg
-      puts "Error while searching for the Captain Role object by name."
+      Bot.log "Error while searching for the Captain Role object by name."
       puts msg
     end
     return role

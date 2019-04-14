@@ -3,6 +3,7 @@ module Bot
     module Achievements
       extend Discordrb::Commands::CommandContainer
       command(:achievements, help_available: false) do |event|
+        Bot.log "#{event.author.username}: #{event.content}"
         captain = DOUBLOONSCAPE.captain(event.author.id.to_i)
         unless captain.nil?
           stats = "**Achievements [#{captain.achieves.count}]**\n"
@@ -18,10 +19,9 @@ module Bot
           end
 
           begin
-            puts "!achievements #{captain.landlubber_name}"
             event.send_message(stats.strip)
           rescue Exception => msg
-            puts "Error while trying to display achievements."
+            Bot.log "Error while trying to display achievements."
             puts msg
           end
         end

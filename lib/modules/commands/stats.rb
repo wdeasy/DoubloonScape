@@ -20,10 +20,10 @@ module Bot
           end
 
           begin
-            puts "!stats #{captain.landlubber_name}"
+            Bot.log "!stats #{captain.landlubber_name}"
             event.respond stats.strip
           rescue Exception => msg
-            puts "Error while trying to display stats."
+            Bot.log "Error while trying to display stats."
             puts msg
           end
         end

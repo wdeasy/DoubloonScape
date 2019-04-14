@@ -21,6 +21,7 @@ module Bot
                     Bot.update_names
                     Bot.update_topic(DOUBLOONSCAPE.status)
                     BOT.game = DOUBLOONSCAPE.current_name('landlubber')
+                    Bot.log "#{DOUBLOONSCAPE.current_name('landlubber')} has taken Captain."
                   end
                 end
                 Bot.send_events(game_events)

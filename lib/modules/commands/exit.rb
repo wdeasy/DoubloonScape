@@ -3,6 +3,7 @@ module Bot
     module Exit
       extend Discordrb::Commands::CommandContainer
       command(:exit, help_available: false) do |event|
+        Bot.log "#{event.author.username}: #{event.content}"      
         break unless event.user.id == CONFIG.owner
         Bot.send_chat("The ship is goin down!")
         Thread.kill($game)

@@ -10,7 +10,7 @@ module Bot
         Bot.reset_captain
         DOUBLOONSCAPE.start
         Bot.send_chat "Anchors Aweigh! DoubloonScape has begun!"
-        puts "Bot connected."
+        Bot.log "Bot connected."
         Bot.update_topic(DOUBLOONSCAPE.status)
 
         Thread.abort_on_exception=true
@@ -21,7 +21,7 @@ module Bot
               Bot.game_loop
             }
           rescue Exception => msg
-            puts "Error in the game loop."
+            Bot.log "Error in the game loop."
             puts msg
           end
         end

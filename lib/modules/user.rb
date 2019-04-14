@@ -10,7 +10,7 @@ module Bot
         end
       end
     rescue Exception => msg
-      puts "Error seaching for member with role."
+      Bot.log "Error seaching for member with role."
       puts msg
     end
     return member.id
@@ -31,7 +31,7 @@ module Bot
     begin
       user = BOT.user(user_id)
     rescue Exception => msg
-      puts "Error while trying to pull the user object."
+      Bot.log "Error while trying to pull the user object."
       puts msg
     end
     return user
@@ -42,26 +42,26 @@ module Bot
     begin
       user = BOT.server(CONFIG.server).member(user_id)
     rescue Exception => msg
-      puts "Error while trying to pull the member object."
+      Bot.log "Error while trying to pull the member object."
       puts msg
     end
-    return user  
+    return user
   end
 
   def self.set_name(user_id, name)
     begin
       user = BOT.server(CONFIG.server).member(user_id).nickname = name
     rescue Exception => msg
-      puts "Error while trying to set nickname."
+      Bot.log "Error while trying to set nickname."
       puts msg
-    end 
+    end
   end
 
   def self.set_game(game)
     begin
       BOT.game = game
     rescue Exception => msg
-      puts "Error while trying to pull the user object."
+      Bot.log "Error while trying to pull the user object."
       puts msg
     end
   end

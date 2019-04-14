@@ -3,7 +3,7 @@ module Bot
     module Disconnected
       extend Discordrb::EventContainer
       disconnected do |event|
-      	puts "Bot disconnected."
+      	Bot.log "Bot disconnected."
         DOUBLOONSCAPE.stop
         unless $game.nil?
           Thread.kill($game)

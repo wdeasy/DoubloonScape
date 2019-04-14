@@ -3,6 +3,7 @@ module Bot
     module Leaderboard
       extend Discordrb::Commands::CommandContainer
       command(:leaderboard, help_available: false) do |event|
+        Bot.log "#{event.author.username}: #{event.content}"
         leaderboard = DOUBLOONSCAPE.leaderboard
           unless leaderboard.empty?
           message = "#{"`".ljust(20)}#{"score".ljust(10)}#{"level".ljust(10)}#{"ilvl".ljust(10)}#{"gold".ljust(10)}\n"
@@ -17,8 +18,8 @@ module Bot
 
             message += "#{placecapn}#{score}#{level}#{ilvl}#{gold}\n"
           end
-          Bot.send_chat(message.strip) 
-        end      
+          Bot.send_chat(message.strip)
+        end
       end
     end
   end
