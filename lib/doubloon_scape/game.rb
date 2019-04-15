@@ -12,7 +12,7 @@ module DoubloonScape
       @captains = Hash.new
       @cooldown = Time.now - seconds
 
-      #past 5 captains
+      #past 50 captains
       @chain = Array.new(50)
 
       #game state
@@ -410,6 +410,10 @@ module DoubloonScape
             @captains[cur].achieves.add_value(battle[:enemy], 1)
             if battle[:item] == true
               battle = @captains[cur].inv.battle_item(battle)
+              if !battle[:item_name].nil?
+                @captains[cur].achieves.add_value('uniques', 1)
+                @captains[cur].achieves.set_values('ilvl', @captains[cur].inv.ilvl)
+              end
             end
           end
         end
@@ -438,7 +442,7 @@ module DoubloonScape
       capns.each do |id, capn|
         levels += capn.level
 
-        if capn.level > top 
+        if capn.level > top
           top = capn.level
         end
       end
@@ -560,6 +564,10 @@ module DoubloonScape
 
     def unlock
       @locked = false
+    end
+
+    def self.log(message)
+      puts "[#{Time.now.strftime("%d/%m/%y %H:%M:%S")}] -- #{message}"
     end
   end
 end

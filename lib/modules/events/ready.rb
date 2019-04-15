@@ -23,6 +23,9 @@ module Bot
             Bot.log "Error in the game loop."
             puts msg
           end
+        else
+          $exit = false
+          $game.wakeup
         end
 
       end

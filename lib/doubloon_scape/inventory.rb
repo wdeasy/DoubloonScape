@@ -129,11 +129,13 @@ module DoubloonScape
 	  def battle_item(battle)
 	  	case battle[:enemy]
 	  	when 'Admiral Nelson'
-	  		battle[:item_name => 'Nelson\'s Folly', :item_description => 'Stolen from the Dreaded Rear Admiral himself.']
-	  		@inventory['Off Hand'] = Item.new(rand(200.300), 'Off Hand', battle[:item_name], battle[:item_description])
+	  		battle[:item_name] = 'Nelson\'s Folly'
+				battle[:item_description] = 'Stolen from the Dreaded Rear Admiral himself.'
+	  		@inventory['Off Hand'] = Item.new(rand(200..300), 'Off Hand', battle[:item_name], battle[:item_description])
 	  	when 'The Kraken'
-	  		battle[:item_name => 'Tentacle Whip', :item_description => 'Fashioned from a dismembered Kraken limb.']
-	  		@inventory['Main Hand'] = Item.new(rand(200.300), 'Main Hand', battle[:item_name], battle[:item_description])
+	  		battle[:item_name] = 'Tentacle Whip'
+				battle[:item_description] = 'Fashioned from a dismembered Kraken limb.'
+	  		@inventory['Main Hand'] = Item.new(rand(200..300), 'Main Hand', battle[:item_name], battle[:item_description])
 	  	end
 	  	return battle
 	  end

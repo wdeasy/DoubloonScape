@@ -12,7 +12,7 @@ module DoubloonScape
   CAPTAINS   = 'data/captains.yaml'
 
   #emoji
-  EMOJI      = ['🔱',':trident']
+  EMOJI      = ["🔱",":trident:","\u{1F531}"]
 
   #base time for turns
   SECONDS    = 60
@@ -39,7 +39,7 @@ module DoubloonScape
 
   PICKPOCKET_COOLDOWN = 30 #minutes
   PICKPOCKET_CHANCE  = 1   #percent
-  PICKPOCKET_MAX     = 0.1 #percent
+  PICKPOCKET_MAX     = 0.2 #percent
   BATTLE_COOLDOWN    = 30  #minutes
   BATTLE_CHANCE      = 1   #percent
   BATTLE_WIN_AMOUNT  = 0.1 #percent

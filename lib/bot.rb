@@ -12,6 +12,8 @@ module Bot
 
   #bot config
   CONFIG = OpenStruct.new YAML.load_file 'data/config.yaml'
+  STDOUT.sync               = true
+  Thread.abort_on_exception = true
 
   #create the bot
   BOT = Discordrb::Commands::CommandBot.new(client_id: CONFIG.client_id,
@@ -27,10 +29,6 @@ module Bot
   DOUBLOONSCAPE.load_captains
   $game = nil
   $exit = false
-
-  #config
-  STDOUT.sync = true
-  Thread.abort_on_exception=true
 
   #bot commands
   module DiscordCommands; end

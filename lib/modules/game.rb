@@ -12,8 +12,8 @@ module Bot
           update_topic(DOUBLOONSCAPE.status)
           disc_count = 0
 
-          if Time.now.min.zero?
-            Bot.log "Time elapsed #{Time.now - last_tick} seconds."
+          if Time.now.min % 10 == 0
+            Bot.log "Time elapsed #{(Time.now - last_tick).round(2)} seconds."
           end
         else
           disc_count+=1
