@@ -448,7 +448,7 @@ module DoubloonScape
       if level.count < 2
         amount = DoubloonScape::TAILWIND_MULTIPLIER
       else
-        amount = (sorted.find_index { |k,_| k== capns[cur] }+1) * DoubloonScape::TAILWIND_MULTIPLIER
+        amount = (sorted.find_index { |k,_| k== cur }+1) * DoubloonScape::TAILWIND_MULTIPLIER
       end
       @captains[cur].tailwind = amount
 
