@@ -436,26 +436,23 @@ module DoubloonScape
 
     def tailwind_check(cur)
       capns = @captains
-      levels = 0
-      top = 0
+      level = Hash.new
+      sorted = Hash.new
 
       capns.each do |id, capn|
-        levels += capn.level
-
-        if capn.level > top
-          top = capn.level
-        end
+        level[id] = capn.level
       end
 
-      avg = levels / capns.count
+      sorted = level.sort_by { |id, level| level }.reverse
 
-      if @captains[cur].level < avg && @captains[cur].level < top
-        @captains[cur].tailwind = DoubloonScape::TAILWIND_MULTIPLIER
+      if level.count < 2
+        amount = DoubloonScape::TAILWIND_MULTIPLIER
       else
-        @captains[cur].tailwind = 1
+        amount = (sorted.find_index { |k,_| k== capns[cur] }+1) * DoubloonScape::TAILWIND_MULTIPLIER
       end
+      @captains[cur].tailwind = amount
 
-      return {:captain => @captains[cur].landlubber_name, :amount => @captains[cur].tailwind}
+      return {:captain => @captains[cur].landlubber_name, :amount => amount}
     end
 
     def status

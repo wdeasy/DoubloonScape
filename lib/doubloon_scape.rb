@@ -68,5 +68,5 @@ module DoubloonScape
   TREASURE_CHANCE    = 1   #out of 1000
 
   #tailwind (catchup mechanic)
-  TAILWIND_MULTIPLIER = 2
+  TAILWIND_MULTIPLIER = 1
 end
