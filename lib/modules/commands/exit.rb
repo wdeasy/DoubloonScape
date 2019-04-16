@@ -14,7 +14,7 @@ module Bot
         end
         Bot.set_topic(nil)
         BOT.game = nil
-        $game.terminate!
+        #$game.terminate!
         exit
       end
     end
