@@ -42,6 +42,7 @@ module DoubloonScape
         @captains[id].offline = 0
         @captains[id]
         save_captain(id)
+        save_chain
       end
     end
 
@@ -170,6 +171,12 @@ module DoubloonScape
       end
     end
 
+    def save_chain
+      @store.transaction do
+        @store['chain'] = @chain
+      end
+    end
+
     def load_captains
       @store.transaction do
         capns = @store.fetch('captains', Array.new)
@@ -244,7 +251,7 @@ module DoubloonScape
             events[:item] = @captains[capn].item_check
             events[:level] = @captains[capn].level_check
             unless events[:level].nil?
-              tailwind_check(capn)
+              events[:tailwind] = tailwind_check(capn)
             end
             events[:record] = @captains[capn].record_check
           end

@@ -104,7 +104,7 @@ module Bot
               mutineers = "#{value[:mutineers].join(", ")}"
               send_chat("#{mutineers} think #{value[:captain]} is unworthy of the wheel and have called for a mutiny!")
               if value[:success] == true
-                send_chat("The mutineers have overthrown the Captain!. #{value[:captain]} will spend the next #{DoubloonScape::BRIG_DURATION} mins in the brig.")
+                send_chat("The mutineers have overthrown the Captain! #{value[:captain]} will spend the next #{DoubloonScape::BRIG_DURATION} mins in the brig.")
               else
                 send_chat("#{value[:captain]} successfully held off the mutiny and secured Captain for the next #{DoubloonScape::WIN_TIME_ADDED} mins.")
               end
