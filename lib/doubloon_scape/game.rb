@@ -269,16 +269,19 @@ module DoubloonScape
     end
 
     def high_seas_check
-      capns = @captains[40..-1]
-      uniq = capns.uniq.count
       display = Hash.new
+      capns = @chain[40..-1]
 
-      if uniq > 4 && @high_seas == false
-        display = {:high_seas => true}
-        @high_seas = true
-      elsif uniq < 5 && @high_seas == true
-        display = {:high_seas => false}
-        @high_seas = false
+      unless capns.nil?
+        uniq = capns.uniq.count
+
+        if uniq > 4 && @high_seas == false
+          display = {:high_seas => true}
+          @high_seas = true
+        elsif uniq < 5 && @high_seas == true
+          display = {:high_seas => false}
+          @high_seas = false
+        end
       end
 
       return display
