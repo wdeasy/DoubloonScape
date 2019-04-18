@@ -28,12 +28,7 @@ module Bot
           $game.wakeup
         end
 
-        th=0
-        Threads.each do |t|
-          th+=1
-        end
-        Bot.log "Thread count: #{th}"
-
+        Bot.log "Thread count: #{Thread.list.count}"
       end
     end
   end
