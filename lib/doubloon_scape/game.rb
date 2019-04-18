@@ -41,7 +41,7 @@ module DoubloonScape
       unless id.nil?
         update_captain(id)
         @captains[id].update_record
-        unless stop
+        unless stop == true
           @captains[id].current = 0
         end
         @captains[id].offline = 0
