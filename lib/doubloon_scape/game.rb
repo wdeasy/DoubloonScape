@@ -356,13 +356,13 @@ module DoubloonScape
         multiplier = 1
       end
 
-      unless @captains[pre].status == :offline
+      if !pre.nil? && @captains[pre].status != :offline
         if rand(100/multiplier) < DoubloonScape::CONTEST_CHANCE
           events = []
           capns = online_captains(cur)
           capns.delete(pre)
 
-          if !pre.nil? && Time.now > @events.duel_cooldown
+          if Time.now > @events.duel_cooldown
             events.push('duel')
           end
 
