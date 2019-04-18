@@ -27,18 +27,23 @@ module DoubloonScape
 
       #treasure
       @treasure = 1
+
+      #high seas
+      @high_seas = false
     end
 
     def captain(id)
       @captains[id]
     end
 
-    def finish_captain(id)
+    def finish_captain(id, stop)
       #stops current captain
       unless id.nil?
         update_captain(id)
         @captains[id].update_record
-        @captains[id].current = 0
+        unless stop
+          @captains[id].current = 0
+        end
         @captains[id].offline = 0
         @captains[id]
         save_captain(id)
@@ -96,7 +101,7 @@ module DoubloonScape
           @chain.shift
 
           #save old captain
-          finish_captain(pre)
+          finish_captain(pre, false)
 
           #achievement checks
           unless pre.nil?
@@ -111,6 +116,7 @@ module DoubloonScape
           events[:bonus] = @captains[cur].bonus_check
           @captains[cur].time_started
           @captains[cur].update_count
+          events[:high_seas] = high_seas_check
           events[:achieve] = @captains[cur].achieve_check
           events[:tailwind] = tailwind_check(cur)
         end
@@ -206,7 +212,7 @@ module DoubloonScape
       @pause = true
       cur = current_captain
       unless cur.nil?
-        finish_captain(cur)
+        finish_captain(cur, true)
       end
       save_captains
     end
@@ -260,6 +266,22 @@ module DoubloonScape
         end
       end
       return events
+    end
+
+    def high_seas_check
+      capns = @captains[40..-1]
+      uniq = capns.uniq.count
+      display = Hash.new
+
+      if uniq > 4 && if @high_seas == false
+        display = {:high_seas => true}
+        @high_seas = true
+      elsif uniq < 5 && @high_seas == true
+        display = {:high_seas => false}
+        @high_seas = false
+      end
+
+      return display
     end
 
     def denier_check(cur=current_captain, pre=previous_captain)
@@ -327,28 +349,37 @@ module DoubloonScape
 
     def contest_check(cur, pre)
       contest = {}
-      if rand(100) < DoubloonScape::CONTEST_CHANCE
-        events = []
-        capns = online_captains(cur)
-        capns.delete(pre)
 
-        if !pre.nil? && Time.now > @events.duel_cooldown
-          events.push('duel')
-        end
+      if @high_seas == true
+        multiplier = 2
+      else
+        multiplier = 1
+      end
 
-        if capns.count >= DoubloonScape::MUTINEER_COUNT && Time.now > @events.mutiny_cooldown
-          events.push('mutiny')
-        end
+      unless @captains[pre].status == :offline
+        if rand(100/multiplier) < DoubloonScape::CONTEST_CHANCE
+          events = []
+          capns = online_captains(cur)
+          capns.delete(pre)
 
-        event = events.sample
-        if event == 'mutiny'
-          mutineers = Hash.new
-          capns.sample(DoubloonScape::MUTINEER_COUNT).each do |mutineer|
-            mutineers[mutineer] = @captains[mutineer]
+          if !pre.nil? && Time.now > @events.duel_cooldown
+            events.push('duel')
           end
-          contest = @events.mutiny(@captains[cur], mutineers)
-        elsif event == 'duel'
-          contest = @events.duel(@captains[cur], @captains[pre])
+
+          if capns.count >= DoubloonScape::MUTINEER_COUNT && Time.now > @events.mutiny_cooldown
+            events.push('mutiny')
+          end
+
+          event = events.sample
+          if event == 'mutiny'
+            mutineers = Hash.new
+            capns.sample(DoubloonScape::MUTINEER_COUNT).each do |mutineer|
+              mutineers[mutineer] = @captains[mutineer]
+            end
+            contest = @events.mutiny(@captains[cur], mutineers)
+          elsif event == 'duel'
+            contest = @events.duel(@captains[cur], @captains[pre])
+          end
         end
       end
 
