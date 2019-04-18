@@ -491,9 +491,13 @@ module DoubloonScape
       else
         amount = (sorted.find_index { |k,_| k== cur }+1) * DoubloonScape::TAILWIND_MULTIPLIER
       end
-      @captains[cur].tailwind = amount
 
-      return {:captain => @captains[cur].landlubber_name, :amount => amount}
+      if @captains[cur].tailwind == amount
+        return {:captain => @captains[cur].landlubber_name, :amount => DoubloonScape::TAILWIND_MULTIPLIER}
+      else
+        @captains[cur].tailwind = amount
+        return {:captain => @captains[cur].landlubber_name, :amount => amount}
+      end
     end
 
     def status
