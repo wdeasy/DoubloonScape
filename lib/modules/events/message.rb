@@ -21,7 +21,7 @@ module Bot
                     Bot.update_roles(event.author)
                     Bot.update_names
                     Bot.update_topic(DOUBLOONSCAPE.status)
-                    Bot.set_game = DOUBLOONSCAPE.current_name('landlubber')
+                    Bot.set_game(DOUBLOONSCAPE.current_name('landlubber'))
                   end
                 end
                 Bot.send_events(game_events)
