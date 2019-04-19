@@ -5,7 +5,7 @@ require 'time'
 
 module DoubloonScape
   class Captain
-    attr_accessor :status, :last_update, :offline, :current, :tailwind
+    attr_accessor :status, :last_update, :offline, :current, :tailwind, :current_gold
     attr_reader :inv, :next_level, :xp, :id, :achieves, :level, :gold, :count, :locked, :total
 
     def initialize(id)
@@ -19,6 +19,7 @@ module DoubloonScape
       @start_time = nil
       @last_update = Time.now
       @current = 0
+      @current_gold = 0
       @total = 0
       @record = 0
       @previous = 0
