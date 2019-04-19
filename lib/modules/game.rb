@@ -155,7 +155,7 @@ module Bot
           end
         when :ghost_captain
           unless value.empty?
-            send_chat("GHOST CAPTAIN! #{{value[:ghost]}} swindles #{[:captain]} out of #{value[:amount]} gold!")
+            send_chat("GHOST CAPTAIN! #{value[:ghost]} swindles #{value[:captain]} out of #{value[:amount]} gold!")
           end
         when :offline_captain
           unless value.empty?
