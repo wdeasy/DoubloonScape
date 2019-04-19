@@ -69,4 +69,7 @@ module DoubloonScape
 
   #tailwind (catchup mechanic)
   TAILWIND_MULTIPLIER = 1
+
+  #highseas (increase contest chance)
+  HIGH_SEAS_MULTIPLIER = 2
 end

@@ -41,7 +41,7 @@ module DoubloonScape
       unless id.nil?
         update_captain(id)
         @captains[id].update_record
-        unless stop == true
+        unless stop
           @captains[id].current = 0
         end
         @captains[id].offline = 0
@@ -250,7 +250,11 @@ module DoubloonScape
         events[:event] = event_check(capn)
         unless capn.nil?
           update_captain(capn)
-          unless @captains[capn].status == :offline
+          if @captains[capn].status == :offline
+            if @captains[capn].offline == 1
+              events[:offline_captain] = true
+            end
+          else
             events[:pickpocket] = pickpocket_check(capn)
             events[:battle] = battle_check(capn)
             events[:treasure] = treasure_check(capn)
@@ -320,20 +324,24 @@ module DoubloonScape
     def event_check(cur=current_captain)
       event = @events.event_check
       current_events = @events.current_events
-      if !event.empty? && !cur.nil?
-        if event[:place] == 'atlantis'
-          @captains[cur].achieves.add_value('atlantis', 1)
-          if current_events.include? 'bermuda triangle'
-            @captains[cur].achieves.add_value('atlamuda', 1)
+
+      unless cur.nil? || @captains[cur].status == :offline
+        if !event.empty? && !cur.nil?
+          if event[:place] == 'atlantis'
+            @captains[cur].achieves.add_value('atlantis', 1)
+            if current_events.include? 'bermuda triangle'
+              @captains[cur].achieves.add_value('atlamuda', 1)
+            end
           end
-        end
-        if event[:place] == 'bermuda triangle'
-          @captains[cur].achieves.add_value('bermuda', 1)
-          if current_events.include? 'atlantis'
-            @captains[cur].achieves.add_value('atlamuda', 1)
+          if event[:place] == 'bermuda triangle'
+            @captains[cur].achieves.add_value('bermuda', 1)
+            if current_events.include? 'atlantis'
+              @captains[cur].achieves.add_value('atlamuda', 1)
+            end
           end
         end
       end
+
       return event
     end
 
@@ -354,7 +362,7 @@ module DoubloonScape
       contest = {}
 
       if @high_seas == true
-        multiplier = 2
+        multiplier = DoubloonScape::HIGH_SEAS_MULTIPLIER
       else
         multiplier = 1
       end

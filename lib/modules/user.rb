@@ -52,7 +52,7 @@ module Bot
     begin
       user = BOT.server(CONFIG.server).member(user_id).nickname = name
     rescue Exception => msg
-      Bot.log "Error while trying to set nickname."
+      Bot.log "Error while trying to set nickname to #{name}."
       puts msg
     end
   end

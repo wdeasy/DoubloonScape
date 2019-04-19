@@ -153,6 +153,10 @@ module Bot
               send_chat("The waters have calmed.")
             end
           end
+        when :offline_captain
+          unless value.empty?
+            Bot.set_game(nil)
+          end
         end
       end
     end
