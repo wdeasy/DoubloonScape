@@ -449,7 +449,7 @@ module DoubloonScape
     end
 
     def ghost_captain(ghost, captain)
-      ghost = Hash.new
+      ghost_capn = Hash.new
 
       if rand(100) < DoubloonScape::GHOST_CAPTAIN_CHANCE
         pickpocket = @events.pickpocket(@captains[captain], @captains[ghost])
@@ -458,13 +458,13 @@ module DoubloonScape
           @captains[ghost].give_gold(pickpocket[:gold])
           save_captain(ghost)
           save_captain(captain)
-          ghost[:ghost]   = ghost.landlubber_name
-          ghost[:captain] = captain.landlubber_name
-          ghost[:amount] = pickpocket[:gold]
+          ghost_capn[:ghost]   = @captains[ghost].landlubber_name
+          ghost_capn[:captain] = @captains[captain].landlubber_name
+          ghost_capn[:amount] = pickpocket[:gold]
         end
       end
 
-      return ghost
+      return ghost_capn
     end
 
     def battle_check(cur=current_captain)
