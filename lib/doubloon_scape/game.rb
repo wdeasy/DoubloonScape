@@ -108,7 +108,7 @@ module DoubloonScape
             denier_check(cur, pre)
             chain_check(cur)
             if @captains[pre].status == :offline
-              events[:ghost_captain] = ghost_captain(@captains[pre], @captains[cur])
+              events[:ghost_captain] = ghost_captain(pre, cur)
               @captains[cur].achieves.add_value('necro', 1)
             end
           end
