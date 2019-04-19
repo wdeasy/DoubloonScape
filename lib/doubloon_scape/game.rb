@@ -43,7 +43,6 @@ module DoubloonScape
         @captains[id].update_record
         unless stop
           @captains[id].current = 0
-          @captains[id].current_gold = 0
         end
         @captains[id].offline = 0
         @captains[id]
@@ -451,13 +450,17 @@ module DoubloonScape
     def ghost_captain(ghost, captain)
       ghost = Hash.new
 
-      if rand(100) <= DoubloonScape::GHOST_CAPTAIN_CHANCE && ghost.current_gold > 0
-        ghost[:ghost]   = ghost.landlubber_name
-        ghost[:captain] = captain.landlubber_name
-        ghost[:amount] = ghost.current_gold
-
-        @captains[captain].take_gold(ghost[:amount])
-        @captains[ghost].give_gold(ghost[:amount])
+      if rand(100) <= DoubloonScape::GHOST_CAPTAIN_CHANCE
+        pickpocket = @events.pickpocket(@captains[captain], @captains[ghost])
+        if pickpocket[:success] == true
+          @captains[captain].take_gold(pickpocket[:gold])
+          @captains[ghost].give_gold(pickpocket[:gold])
+          save_captain(ghost)
+          save_captain(captain)
+          ghost[:ghost]   = ghost.landlubber_name
+          ghost[:captain] = captain.landlubber_name
+          ghost[:amount] = pickpocket[:gold]
+        end
       end
 
       return ghost
