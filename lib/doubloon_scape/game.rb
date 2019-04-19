@@ -43,6 +43,7 @@ module DoubloonScape
         @captains[id].update_record
         unless stop
           @captains[id].current = 0
+          @captains[id].current_gold = 0
         end
         @captains[id].offline = 0
         @captains[id]
@@ -108,6 +109,7 @@ module DoubloonScape
             denier_check(cur, pre)
             chain_check(cur)
             if @captains[pre].status == :offline
+              events[:ghost_captain] = ghost_captain(@captains[pre], @captains[cur])
               @captains[cur].achieves.add_value('necro', 1)
             end
           end
@@ -444,6 +446,21 @@ module DoubloonScape
         end
       end
       return pickpocket
+    end
+
+    def ghost_captain(ghost, captain)
+      ghost = Hash.new
+
+      if rand(100) <= DoubloonScape::GHOST_CAPTAIN_CHANCE && ghost.current_gold > 0
+        ghost[:ghost]   = ghost.landlubber_name
+        ghost[:captain] = captain.landlubber_name
+        ghost[:amount] = ghost.current_gold
+
+        @captains[captain].take_gold(ghost[:amount])
+        @captains[ghost].give_gold(ghost[:amount])
+      end
+
+      return ghost
     end
 
     def battle_check(cur=current_captain)

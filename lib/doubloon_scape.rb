@@ -72,4 +72,7 @@ module DoubloonScape
 
   #highseas (increase contest chance)
   HIGH_SEAS_MULTIPLIER = 2
+
+  #ghostcaptain
+  GHOST_CAPTAIN_CHANCE = 100 #percent
 end

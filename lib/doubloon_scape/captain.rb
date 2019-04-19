@@ -60,11 +60,13 @@ module DoubloonScape
 
     def give_gold(amount)
       @gold += amount
+      @current_gold += amount
       @achieves.set_values('gold', @gold.floor.to_i)
     end
 
     def take_gold(amount)
       @gold -= amount
+      @current_gold -= amount
       @achieves.set_values('gold', @gold.floor.to_i)
     end
 
@@ -111,6 +113,7 @@ module DoubloonScape
       @start_time = Time.now
       @last_update = Time.now
       @current = 0
+      @current_gold = 0
       @offline = 0
       @achieves.reset_value('currents')
       rate_check

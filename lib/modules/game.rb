@@ -153,6 +153,10 @@ module Bot
               send_chat("The waters have calmed.")
             end
           end
+        when :ghost_captain
+          unless value.empty?
+            send_chat("GHOST CAPTAIN! #{{value[:ghost]}} swindles #{[:captain]} out of #{value[:amount]} gold!")
+          end
         when :offline_captain
           unless value.empty?
             Bot.set_game(nil)
