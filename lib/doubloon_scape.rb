@@ -70,9 +70,13 @@ module DoubloonScape
   #tailwind (catchup mechanic)
   TAILWIND_MULTIPLIER = 1
 
-  #highseas (increase contest chance)
+  #high seas (increase contest chance)
   HIGH_SEAS_MULTIPLIER = 2
 
-  #ghostcaptain
+  #ghost captain (previous offline captain)
   GHOST_CAPTAIN_CHANCE = 100 #percent
+
+  #pirates day (increased item chance)
+  PIRATES_DAY = "September 19"
+  PIRATES_DAY_MULTIPLIER = 2
 end

@@ -248,6 +248,7 @@ module DoubloonScape
       capn = current_captain
       unless @pause == true
         brig_check
+        events[:holiday] = @events.holiday_check
         events[:event] = event_check(capn)
         unless capn.nil?
           update_captain(capn)
@@ -450,7 +451,7 @@ module DoubloonScape
     def ghost_captain(ghost, captain)
       ghost = Hash.new
 
-      if rand(100) <= DoubloonScape::GHOST_CAPTAIN_CHANCE
+      if rand(100) < DoubloonScape::GHOST_CAPTAIN_CHANCE
         pickpocket = @events.pickpocket(@captains[captain], @captains[ghost])
         if pickpocket[:success] == true
           @captains[captain].take_gold(pickpocket[:gold])

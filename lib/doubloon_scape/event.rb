@@ -1,3 +1,6 @@
+require 'date'
+require 'time'
+
 module DoubloonScape
   class Event
   	def initialize
@@ -119,6 +122,19 @@ module DoubloonScape
       end
 
     	return event
+    end
+
+    def holiday_check
+      event = {}
+
+      if Time.now.hour == 0 && Time.now.min == 0
+        case Date.today
+        when Date.parse(DoubloonScape::PIRATES_DAY)
+          event[:pirates_day] == true
+        end
+			end
+
+      return event
     end
 
     def mutiny(captain, mutineers)

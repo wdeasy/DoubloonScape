@@ -1,3 +1,5 @@
+require 'date'
+
 module DoubloonScape
 	class Inventory
 		class Item
@@ -89,7 +91,13 @@ module DoubloonScape
 
 	  def item_check(level)
 	  	item = {}
-	  	if rand(100) < DoubloonScape::ITEM_CHANCE
+
+			multiplier = 1
+			if Date.parse(DoubloonScape::PIRATES_DAY) == Date.today
+				multiplier = DoubloonScape::PIRATES_DAY_MULTIPLIER
+			end
+
+	  	if rand(100/multiplier) < DoubloonScape::ITEM_CHANCE
 	  		ilvl = 1
 	  		slot = ['Head', 'Chest', 'Hands', 'Legs', 'Pet', 'Trinket', 'Main Hand', 'Off Hand'].sample
 	  		(1..level*DoubloonScape::ITEM_LEVEL).each do |i|

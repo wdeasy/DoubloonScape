@@ -157,6 +157,12 @@ module Bot
           unless value.empty?
             send_chat("GHOST CAPTAIN! #{value[:ghost]} swindles #{value[:captain]} out of #{value[:amount]} gold!")
           end
+        when :holiday
+          unless value.empty?
+            if value[:pirates_day] == true
+              send_chat("PIRATES DAY! Increased chance of finding items today!")
+            end
+          end
         when :offline_captain
           unless value.empty?
             Bot.set_game(nil)
