@@ -165,7 +165,6 @@ module DoubloonScape
       if @record < @current
         @record = @current
       end
-      @current = 0
     end
 
     def achieve_check

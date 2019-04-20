@@ -150,7 +150,7 @@ module Bot
             if value[:high_seas] == true
               send_chat("HIGH SEAS! The sailors are growing restless!")
             else
-              send_chat("The waters have calmed.")
+              send_chat("CALM WATERS! The sailors are content.")
             end
           end
         when :ghost_captain
@@ -160,7 +160,7 @@ module Bot
         when :holiday
           unless value.empty?
             if value[:pirates_day] == true
-              send_chat("PIRATES DAY! Increased chance of finding items today!")
+              send_chat("PIRATES DAY! Increased chance of finding items today! \@here")
             end
           end
         when :offline_captain
@@ -201,6 +201,7 @@ module Bot
         Bot.send_chat("Continuing with Captain #{capn.username}")
         role = find_role
         grant_role(capn, role)
+        Bot.set_game(DOUBLOONSCAPE.current_name('landlubber'))
       end
     end
   end

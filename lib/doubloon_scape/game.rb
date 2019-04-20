@@ -521,7 +521,7 @@ module DoubloonScape
         amount = (sorted.find_index { |k,_| k== cur }+1) * DoubloonScape::TAILWIND_MULTIPLIER
       end
 
-      if @captains[cur].tailwind == amount
+      if @captains[cur].tailwind == amount && @captains[cur].current > 0
         return {:captain => @captains[cur].landlubber_name, :amount => DoubloonScape::TAILWIND_MULTIPLIER}
       else
         @captains[cur].tailwind = amount
