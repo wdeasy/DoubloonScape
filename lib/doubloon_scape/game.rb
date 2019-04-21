@@ -675,8 +675,8 @@ module DoubloonScape
 
     def process_queue
       until @save_queue.empty?
+        id = @save_queue.pop
         save_captain(id)
-        @save_queue -= [id]
       end
     end
   end
