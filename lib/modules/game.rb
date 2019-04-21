@@ -4,7 +4,7 @@ module Bot
     disc_count = 0
     while true do
       Thread.stop if $exit
-      if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false
+      if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false && DOUBLOONSCAPE.locked == false
         last_tick = Time.now
         if BOT.connected?
           DOUBLOONSCAPE.update_captains_status(get_members_status)
@@ -133,7 +133,7 @@ module Bot
           unless value.empty?
             send_chat("#{value[:enemy]} has set seige to the ship!")
             if value[:success] == true
-              send_chat("#{value[:captain]} has sent #{value[:enemy]} to Davy Jones's Locker!")
+              send_chat("#{value[:captain]} has sent #{value[:enemy]} to Davy Jones's Locker and gains #{DoubloonScape::BATTLE_WIN_AMOUNT}xp!")
               if !value[:item_name].nil?
                 send_chat("#{value[:captain]} claimed a trophy! #{value[:item_name]}, #{value[:item_description]}")
               end

@@ -39,10 +39,10 @@ module DoubloonScape
 
   PICKPOCKET_COOLDOWN = 30 #minutes
   PICKPOCKET_CHANCE  = 1   #percent
-  PICKPOCKET_MAX     = 0.2 #percent
+  PICKPOCKET_MAX     = 0.25 #percent
   BATTLE_COOLDOWN    = 30  #minutes
   BATTLE_CHANCE      = 1   #percent
-  BATTLE_WIN_AMOUNT  = 0.1 #percent
+  BATTLE_WIN_AMOUNT  = 10 #percent
   BATTLE_MIN_LEVEL   = 20
   BATTLE_ITEM_CHANCE = 1   #percent
 

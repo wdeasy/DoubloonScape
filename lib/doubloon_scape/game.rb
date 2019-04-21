@@ -30,6 +30,9 @@ module DoubloonScape
 
       #high seas
       @high_seas = false
+
+      #save queue
+      @save_queue = Array.new()
     end
 
     def captain(id)
@@ -46,7 +49,7 @@ module DoubloonScape
         end
         @captains[id].offline = 0
         @captains[id]
-        save_captain(id)
+        add_to_queue(id)
         save_chain
       end
     end
@@ -155,26 +158,36 @@ module DoubloonScape
     end
 
     def save_captain(id)
-      @store.transaction do
-        capns = @store.fetch('captains', Array.new)
-        unless capns.include? id
-          capns.push(id)
-          @store['captains'] = capns
+      begin
+        @store.transaction do
+          capns = @store.fetch('captains', Array.new)
+          unless capns.include? id
+            capns.push(id)
+            @store['captains'] = capns
+          end
+          @store[id] = @captains[id]
         end
-        @store[id] = @captains[id]
+      rescue PStore::Error => msg
+        log "Unable to save captain #{id}."
+        log msg
       end
     end
 
     def save_captains
-      @store.transaction do
-        capns = Array.new
-        @captains.each do |id, capn|
-          capns.push(id)
-          @store[id] = capn
+      begin
+        @store.transaction do
+          capns = Array.new
+          @captains.each do |id, capn|
+            capns.push(id)
+            @store[id] = capn
+          end
+          @store['captains'] = capns
+          @store['chain']    = @chain
+          @store['treasure'] = @treasure
         end
-        @store['captains'] = capns
-        @store['chain']    = @chain
-        @store['treasure'] = @treasure
+      rescue PStore::Error => msg
+        log "Unable to save all captains."
+        log msg
       end
     end
 
@@ -218,8 +231,8 @@ module DoubloonScape
       save_captains
     end
 
-    def amount
-      (DoubloonScape::AMOUNT + @events.amount_modifier) * @captains[current_captain].tailwind
+    def amount(id)
+      (DoubloonScape::AMOUNT + @events.amount_modifier) * @captains[id].tailwind
     end
 
     def seconds
@@ -232,8 +245,8 @@ module DoubloonScape
         unless @captains[id].status == :offline
           time = (Time.now - @captains[id].last_update)
           if id == current_captain
-            @captains[id].give_xp(amount)
-            @captains[id].give_gold(amount)
+            @captains[id].give_xp(amount(id))
+            @captains[id].give_gold(amount(id))
           end
           @captains[id].update_current(time)
           @captains[id].update_total(time)
@@ -268,8 +281,10 @@ module DoubloonScape
             events[:record] = @captains[capn].record_check
           end
           events[:achieve] = @captains[capn].achieve_check
-          save_captain(capn)
+          add_to_queue(capn)
         end
+
+        process_queue
       end
       return events
     end
@@ -402,14 +417,14 @@ module DoubloonScape
           case contest[:event]
           when :mutiny
             mutineers.each do |id, capn|
-              amount = @captains[id].next_level * DoubloonScape::MUTINEER_BONUS
-              @captains[id].give_xp(amount)
-              save_captain(id)
+              amt = @captains[id].next_level * DoubloonScape::MUTINEER_BONUS
+              @captains[id].give_xp(amt)
+              add_to_queue(id)
             end
           when :duel
-            amount = @captains[pre].next_level * DoubloonScape::DUEL_BONUS
-            @captains[pre].give_xp(amount)
-            save_captain(pre)
+            amt = @captains[pre].next_level * DoubloonScape::DUEL_BONUS
+            @captains[pre].give_xp(amt)
+            add_to_queue(pre)
           end
         else
           @cooldown = Time.now + DoubloonScape::WIN_TIME_ADDED.minutes
@@ -436,12 +451,13 @@ module DoubloonScape
         capns = online_captains(cur)
         rogue = capns.sample
         unless capns.empty?
-          pickpocket = @events.pickpocket(@captains[cur], @captains[rogue])
+          multiplier = level_rank(cur)
+          pickpocket = @events.pickpocket(@captains[cur], @captains[rogue], multiplier)
 
           if pickpocket[:success] == true
             @captains[cur].take_gold(pickpocket[:gold])
             @captains[rogue].give_gold(pickpocket[:gold])
-            save_captain(rogue)
+            add_to_queue(rogue)
           end
         end
       end
@@ -452,12 +468,13 @@ module DoubloonScape
       ghost_capn = Hash.new
 
       if rand(100) < DoubloonScape::GHOST_CAPTAIN_CHANCE
-        pickpocket = @events.pickpocket(@captains[captain], @captains[ghost])
+        multiplier = level_check(captain)
+        pickpocket = @events.pickpocket(@captains[captain], @captains[ghost], multiplier)
         if pickpocket[:success] == true
           @captains[captain].take_gold(pickpocket[:gold])
           @captains[ghost].give_gold(pickpocket[:gold])
-          save_captain(ghost)
-          save_captain(captain)
+          add_to_queue(ghost)
+          add_to_queue(captain)
           ghost_capn[:ghost]   = @captains[ghost].landlubber_name
           ghost_capn[:captain] = @captains[captain].landlubber_name
           ghost_capn[:amount] = pickpocket[:gold]
@@ -475,8 +492,8 @@ module DoubloonScape
           battle = @events.battle(@captains[cur], max_roll)
 
           if battle[:success] == true
-            amount = @captains[cur].next_level * DoubloonScape::BATTLE_WIN_AMOUNT
-            @captains[cur].give_xp(amount)
+            amt = @captains[cur].next_level * (DoubloonScape::BATTLE_WIN_AMOUNT * .01)
+            @captains[cur].give_xp(amt)
             @captains[cur].achieves.add_value(battle[:enemy], 1)
             if battle[:item] == true
               battle = @captains[cur].inv.battle_item(battle)
@@ -504,8 +521,12 @@ module DoubloonScape
       return treasure
     end
 
-    def tailwind_check(cur)
+    def level_rank(cur)
       capns = @captains
+      if cur.nil? || captains.empty?
+        return 1
+      end
+
       level = Hash.new
       sorted = Hash.new
 
@@ -515,17 +536,24 @@ module DoubloonScape
 
       sorted = level.sort_by { |id, level| level }.reverse
 
-      if level.count < 2
-        amount = DoubloonScape::TAILWIND_MULTIPLIER
-      else
-        amount = (sorted.find_index { |k,_| k== cur }+1) * DoubloonScape::TAILWIND_MULTIPLIER
-      end
+      rank = sorted.find_index { |k,_| k== cur }+1
 
-      if @captains[cur].tailwind == amount && @captains[cur].current > 0
+      if rank < 1
+        return 1
+      else
+        return rank
+      end
+    end
+
+    def tailwind_check(cur)
+      rank = level_rank(cur)
+      amt = rank * DoubloonScape::TAILWIND_MULTIPLIER
+
+      if @captains[cur].tailwind == amt && @captains[cur].current > 0
         return {:captain => @captains[cur].landlubber_name, :amount => DoubloonScape::TAILWIND_MULTIPLIER}
       else
-        @captains[cur].tailwind = amount
-        return {:captain => @captains[cur].landlubber_name, :amount => amount}
+        @captains[cur].tailwind = amt
+        return {:captain => @captains[cur].landlubber_name, :amount => amt}
       end
     end
 
@@ -639,6 +667,17 @@ module DoubloonScape
 
     def self.log(message)
       puts "[#{Time.now.strftime("%d/%m/%y %H:%M:%S")}] -- #{message}"
+    end
+
+    def self.add_to_queue(id)
+      @save_queue.push(id) unless @save_queue.include?(id)
+    end
+
+    def self.process_queue(id)
+      until @save_queue.empty?
+        save_captain(id)
+        @save_queue -= [id]
+      end
     end
   end
 end

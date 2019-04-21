@@ -187,7 +187,7 @@ module DoubloonScape
       return {:success => succeed, :enemy => enemy, :captain => captain.landlubber_name, :item => item}
     end
 
-    def pickpocket(captain, rogue)
+    def pickpocket(captain, rogue, multiplier)
       @last_pickpocket = Time.now
       pickpocket = Hash.new
       captains_roll = rand(captain.roll)
@@ -196,13 +196,21 @@ module DoubloonScape
       gold = 0
 
       if captains_roll < rogues_roll && captain.gold > 0
-        gold = rand((captain.gold * DoubloonScape::PICKPOCKET_MAX).ceil.to_i)
+        gold = rand((captain.gold * DoubloonScape::PICKPOCKET_MAX).ceil.to_i) / multiplier
         if gold > 0
           succeed = true
         end
       end
 
       return {:success => succeed, :captain => captain.landlubber_name, :rogue => rogue.landlubber_name, :gold => gold}
+    end
+
+    def whirlpool
+
+    end
+
+    def keelhaul
+
     end
   end
 end
