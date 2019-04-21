@@ -183,6 +183,10 @@ module DoubloonScape
       return count
     end
 
+    def total
+      @achievements.count
+    end
+
     def load_properties
       #for the alphas
       define_property('alpha', 0, ACTIVE_IF_GREATER_THAN, 0, 'alpha')

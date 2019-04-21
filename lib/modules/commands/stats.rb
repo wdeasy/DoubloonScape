@@ -12,7 +12,7 @@ module Bot
           stats += "`Longest Time as Captain:    #{Bot.minutes(captain.record)}`\n"
           stats += "`Total Minutes as Captain:   #{Bot.minutes(captain.total)}`\n"
 
-          stats += "\n**Achievements [#{captain.achieves.count}/#{DOUBLOONSCAPE.achievements.count}]**\n"
+          stats += "\n**Achievements [#{captain.achieves.count}/#{captain.achieves.total}]**\n"
           realm_firsts = 0
           captain.achieves.achievements.each do |name, achieve|
             if achieve.realm_first == true
