@@ -168,8 +168,8 @@ module DoubloonScape
           @store[id] = @captains[id]
         end
       rescue PStore::Error => msg
-        game_log "Unable to save captain #{id}."
-        game_log msg
+        log "Unable to save captain #{id}."
+        log msg
       end
     end
 
@@ -186,8 +186,8 @@ module DoubloonScape
           @store['treasure'] = @treasure
         end
       rescue PStore::Error => msg
-        game_log "Unable to save all captains."
-        game_log msg
+        log "Unable to save all captains."
+        log msg
       end
     end
 
@@ -523,7 +523,7 @@ module DoubloonScape
 
     def level_rank(cur)
       capns = @captains
-      if cur.nil? || captains.empty?
+      if cur.nil? || capns.empty?
         return 1
       end
 
@@ -665,7 +665,7 @@ module DoubloonScape
       @locked = false
     end
 
-    def game_log(message)
+    def log(message)
       puts "[#{Time.now.strftime("%d/%m/%y %H:%M:%S")}] -- #{message}"
     end
 
