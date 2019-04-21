@@ -673,7 +673,7 @@ module DoubloonScape
       @save_queue.push(id) unless @save_queue.include?(id)
     end
 
-    def process_queue(id)
+    def process_queue
       until @save_queue.empty?
         save_captain(id)
         @save_queue -= [id]

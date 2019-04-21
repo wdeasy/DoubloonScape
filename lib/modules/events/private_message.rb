@@ -2,8 +2,10 @@ module Bot
   module DiscordEvents
     module PrivateMessage
       extend Discordrb::EventContainer
-      message do |event|
-        Bot.log "PM: #{event.author.username} : #{event.content}"
+      private_message do |event|
+        if event.channel.pm?
+          Bot.log "PM: #{event.author.username} : #{event.content}"
+        end
       end
     end
   end
