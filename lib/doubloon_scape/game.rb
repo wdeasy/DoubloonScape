@@ -231,7 +231,7 @@ module DoubloonScape
       save_captains
     end
 
-    def amount(id)
+    def amount(id=current_captain)
       (DoubloonScape::AMOUNT + @events.amount_modifier) * @captains[id].tailwind
     end
 
