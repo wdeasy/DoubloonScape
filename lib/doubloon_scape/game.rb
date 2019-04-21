@@ -492,7 +492,7 @@ module DoubloonScape
           battle = @events.battle(@captains[cur], max_roll)
 
           if battle[:success] == true
-            amt = @captains[cur].next_level * (DoubloonScape::BATTLE_WIN_AMOUNT * .01)
+            amt = @captains[cur].next_level * (DoubloonScape::BATTLE_WIN_AMOUNT * 0.01)
             @captains[cur].give_xp(amt)
             @captains[cur].achieves.add_value(battle[:enemy], 1)
             if battle[:item] == true
