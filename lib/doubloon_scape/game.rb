@@ -168,8 +168,8 @@ module DoubloonScape
           @store[id] = @captains[id]
         end
       rescue PStore::Error => msg
-        log "Unable to save captain #{id}."
-        log msg
+        game_log "Unable to save captain #{id}."
+        game_log msg
       end
     end
 
@@ -186,8 +186,8 @@ module DoubloonScape
           @store['treasure'] = @treasure
         end
       rescue PStore::Error => msg
-        log "Unable to save all captains."
-        log msg
+        game_log "Unable to save all captains."
+        game_log msg
       end
     end
 
@@ -665,11 +665,11 @@ module DoubloonScape
       @locked = false
     end
 
-    def self.log(message)
+    def game_log(message)
       puts "[#{Time.now.strftime("%d/%m/%y %H:%M:%S")}] -- #{message}"
     end
 
-    def self.add_to_queue(id)
+    def add_to_queue(id)
       @save_queue.push(id) unless @save_queue.include?(id)
     end
 
