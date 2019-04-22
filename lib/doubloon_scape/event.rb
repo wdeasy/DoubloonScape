@@ -196,7 +196,7 @@ module DoubloonScape
       gold = 0
 
       if captains_roll < rogues_roll && captain.gold > 0
-        gold = rand((captain.gold * DoubloonScape::PICKPOCKET_MAX).ceil.to_i) / multiplier
+        gold = (rand(captain.gold * DoubloonScape::PICKPOCKET_MAX) / multiplier).ceil.to_i
         if gold > 0
           succeed = true
         end

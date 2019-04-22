@@ -42,7 +42,6 @@ module DoubloonScape
     def finish_captain(id, stop)
       #stops current captain
       unless id.nil?
-        update_captain(id)
         @captains[id].update_record
         unless stop
           @captains[id].current = 0
@@ -240,20 +239,16 @@ module DoubloonScape
     end
 
     def update_captain(id)
-      unless @captains[id].locked == true
-        @captains[id].lock
-        unless @captains[id].status == :offline
-          time = (Time.now - @captains[id].last_update)
-          if id == current_captain
-            @captains[id].give_xp(amount(id))
-            @captains[id].give_gold(amount(id))
-          end
-          @captains[id].update_current(time)
-          @captains[id].update_total(time)
+      unless @captains[id].status == :offline
+        time = (Time.now - @captains[id].last_update)
+        if id == current_captain
+          @captains[id].give_xp(amount(id))
+          @captains[id].give_gold(amount(id))
         end
-        @captains[id].last_update = Time.now
-        @captains[id].unlock
+        @captains[id].update_current(time)
+        @captains[id].update_total(time)
       end
+      @captains[id].last_update = Time.now
     end
 
     def do_turn
@@ -464,19 +459,19 @@ module DoubloonScape
       return pickpocket
     end
 
-    def ghost_captain(ghost, captain)
+    def ghost_captain(ghost, capn)
       ghost_capn = Hash.new
 
       if rand(100) < DoubloonScape::GHOST_CAPTAIN_CHANCE
-        multiplier = level_check(captain)
-        pickpocket = @events.pickpocket(@captains[captain], @captains[ghost], multiplier)
+        multiplier = level_check(capn)
+        pickpocket = @events.pickpocket(@captains[capn], @captains[ghost], multiplier)
         if pickpocket[:success] == true
-          @captains[captain].take_gold(pickpocket[:gold])
+          @captains[capn].take_gold(pickpocket[:gold])
           @captains[ghost].give_gold(pickpocket[:gold])
           add_to_queue(ghost)
-          add_to_queue(captain)
+          add_to_queue(capn)
           ghost_capn[:ghost]   = @captains[ghost].landlubber_name
-          ghost_capn[:captain] = @captains[captain].landlubber_name
+          ghost_capn[:captain] = @captains[capn].landlubber_name
           ghost_capn[:amount] = pickpocket[:gold]
         end
       end

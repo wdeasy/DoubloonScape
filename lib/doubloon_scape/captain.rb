@@ -24,7 +24,7 @@ module DoubloonScape
       @previous = 0
       @created = Time.now
       @status = nil
-      @locked = false
+      #@locked = false
       @history = Array.new(60)
       @offline = 0
       @tailwind = 1
@@ -222,15 +222,6 @@ module DoubloonScape
       if @record < @current
         @record = @current
       end
-    end
-
-    #lock the captain during an update to prevent a do_turn / change_captains conflict
-    def lock
-      @locked = true
-    end
-
-    def unlock
-      @locked = false
     end
   end
 end
