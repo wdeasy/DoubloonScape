@@ -24,7 +24,6 @@ module DoubloonScape
       @previous = 0
       @created = Time.now
       @status = nil
-      #@locked = false
       @history = Array.new(60)
       @offline = 0
       @tailwind = 1
@@ -173,7 +172,7 @@ module DoubloonScape
 
     def bonus_check
       if @start_time.nil? || !Date.parse(@start_time.to_s).today?
-        bonus = (base_xp(@level) * DoubloonScape::BONUS).floor.to_i
+        bonus = (base_xp(@level) * (DoubloonScape::BONUS * 0.01)).floor.to_i
         @xp += bonus
         return true
       else

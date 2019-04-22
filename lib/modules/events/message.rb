@@ -11,7 +11,8 @@ module Bot
             Bot.send_chat("The Captain cannot be taken for #{seconds} more seconds.")
           else
             if DOUBLOONSCAPE.brig.key? event.author.id.to_i
-              Bot.send_chat("You are currently sitting in the Brig and are incapable of being Captain.")
+              seconds = DOUBLOONSCAPE.brig[event.author.id.to_i] - Time.now).ceil
+              Bot.send_chat("You are currently sitting in the Brig for #{seconds} more seconds.")
             else
               if DOUBLOONSCAPE.locked == false
                 DOUBLOONSCAPE.lock

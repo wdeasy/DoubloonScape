@@ -86,7 +86,7 @@ module DoubloonScape
     	end
 
       if @atlantis_end.nil? || @bermuda_end.nil?
-        if rand(100) < DoubloonScape::ATLAMUDA_CHANCE
+        if rand(1000) < (DoubloonScape::ATLAMUDA_CHANCE*10)
           if !@atlantis_end.nil?
             place = 'bermuda triangle'
           elsif !@bermuda_end.nil?
@@ -196,7 +196,7 @@ module DoubloonScape
       gold = 0
 
       if captains_roll < rogues_roll && captain.gold > 0
-        gold = (rand(captain.gold * DoubloonScape::PICKPOCKET_MAX) / multiplier).ceil.to_i
+        gold = (rand(captain.gold * (DoubloonScape::PICKPOCKET_MAX * 0.01)) / multiplier).ceil.to_i
         if gold > 0
           succeed = true
         end

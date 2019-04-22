@@ -412,12 +412,12 @@ module DoubloonScape
           case contest[:event]
           when :mutiny
             mutineers.each do |id, capn|
-              amt = @captains[id].next_level * DoubloonScape::MUTINEER_BONUS
+              amt = @captains[id].next_level * (DoubloonScape::MUTINEER_BONUS * 0.01)
               @captains[id].give_xp(amt)
               add_to_queue(id)
             end
           when :duel
-            amt = @captains[pre].next_level * DoubloonScape::DUEL_BONUS
+            amt = @captains[pre].next_level * (DoubloonScape::DUEL_BONUS * 0.01)
             @captains[pre].give_xp(amt)
             add_to_queue(pre)
           end
@@ -463,7 +463,7 @@ module DoubloonScape
       ghost_capn = Hash.new
 
       if rand(100) < DoubloonScape::GHOST_CAPTAIN_CHANCE
-        multiplier = level_check(capn)
+        multiplier = level_rank(capn)
         pickpocket = @events.pickpocket(@captains[capn], @captains[ghost], multiplier)
         if pickpocket[:success] == true
           @captains[capn].take_gold(pickpocket[:gold])

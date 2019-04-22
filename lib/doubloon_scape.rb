@@ -21,7 +21,7 @@ module DoubloonScape
   AMOUNT     = 1
 
   #first captain of the day bonus
-  BONUS      = 0.1
+  BONUS      = 10 #percent
 
   #level math
   BASE 		   = 10
@@ -34,20 +34,20 @@ module DoubloonScape
   MUTINY_COOLDOWN    = 30  #minutes
   DUEL_COOLDOWN      = 30  #minutes
   MUTINEER_COUNT     = 3   #online players required
-  MUTINEER_BONUS     = 0.1 #percent awarded to mutineers if they win
-  DUEL_BONUS         = 0.1 #percent
+  MUTINEER_BONUS     = 10  #percent awarded to mutineers if they win
+  DUEL_BONUS         = 10  #percent
 
   PICKPOCKET_COOLDOWN = 30 #minutes
   PICKPOCKET_CHANCE  = 1   #percent
-  PICKPOCKET_MAX     = 0.25 #percent
+  PICKPOCKET_MAX     = 25  #percent
   BATTLE_COOLDOWN    = 30  #minutes
   BATTLE_CHANCE      = 1   #percent
-  BATTLE_WIN_AMOUNT  = 10 #percent
+  BATTLE_WIN_AMOUNT  = 10  #percent
   BATTLE_MIN_LEVEL   = 20
   BATTLE_ITEM_CHANCE = 1   #percent
 
   #atlantis and bermuda triangle
-  ATLAMUDA_CHANCE    = 1   #percent
+  ATLAMUDA_CHANCE    = 0.5   #percent
   ATLANTIS_MOD_MAX   = 100 #percent
   BERMUDA_MOD_MAX    = 50  #percent
   BUFF_DURATION      = 60  #minutes
