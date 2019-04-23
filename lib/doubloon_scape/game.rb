@@ -489,7 +489,7 @@ module DoubloonScape
 
     def keelhaul_check(cur)
       keelhaul = Hash.new
-      if rand(1000) < (DoubloonScape:KEELHAUL_CHANCE*10)
+      if rand(1000) < (DoubloonScape::KEELHAUL_CHANCE*10)
         capns = online_captains(cur)
         if capns.count > 1
           sailor = capns.sample
