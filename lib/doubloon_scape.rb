@@ -76,6 +76,9 @@ module DoubloonScape
   #ghost captain (previous offline captain)
   GHOST_CAPTAIN_CHANCE = 100 #percent
 
+  #keelhaul
+  KEELHAUL_CHANCE = 1
+
   #pirates day (increased item chance)
   PIRATES_DAY = "September 19"
   PIRATES_DAY_MULTIPLIER = 2

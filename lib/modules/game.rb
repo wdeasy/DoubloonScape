@@ -157,6 +157,11 @@ module Bot
           unless value.empty?
             send_chat("GHOST CAPTAIN! #{value[:ghost]} swindles #{value[:captain]} out of #{value[:amount]} gold!")
           end
+        when :keelhaul
+          unless value.empty?
+            send_chat("#{value[:captain]} has called for #{value[:sailor]} to be KEELHAULED!")
+            send_chat("#{value[:amount]} gold falls into the sea while overboard.")
+          end
         when :holiday
           unless value.empty?
             if value[:pirates_day] == true

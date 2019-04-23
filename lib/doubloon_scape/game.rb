@@ -33,6 +33,7 @@ module DoubloonScape
 
       #save queue
       @save_queue = Array.new()
+      @chain_updated = false
     end
 
     def captain(id)
@@ -49,7 +50,7 @@ module DoubloonScape
         @captains[id].offline = 0
         @captains[id]
         add_to_queue(id)
-        save_chain
+        @chain_updated = true
       end
     end
 
@@ -76,7 +77,8 @@ module DoubloonScape
           @captains[id].achieves.add_value('alpha', 1)
         end
 
-        firstplace = [165489755620900864]
+        firstplace = [165489755620900864,
+                      164140817718575106]
         if firstplace.include? id
           @captains[id].achieves.add_value('firstplace', 1)
         end
@@ -110,7 +112,7 @@ module DoubloonScape
             denier_check(cur, pre)
             chain_check(cur)
             if @captains[pre].status == :offline
-              events[:ghost_captain] = ghost_captain(pre, cur)
+              events[:ghost_captain] = ghost_captain_check(pre, cur)
               @captains[cur].achieves.add_value('necro', 1)
             end
           end
@@ -191,8 +193,13 @@ module DoubloonScape
     end
 
     def save_chain
-      @store.transaction do
-        @store['chain'] = @chain
+      begin
+        @store.transaction do
+          @store['chain'] = @chain
+        end
+      rescue PStore::Error => msg
+        log "Unable to save chain."
+        log msg
       end
     end
 
@@ -267,6 +274,7 @@ module DoubloonScape
           else
             events[:pickpocket] = pickpocket_check(capn)
             events[:battle] = battle_check(capn)
+            events[:keelhaul] = keelhaul_check(capn)
             events[:treasure] = treasure_check(capn)
             events[:item] = @captains[capn].item_check
             events[:level] = @captains[capn].level_check
@@ -459,7 +467,7 @@ module DoubloonScape
       return pickpocket
     end
 
-    def ghost_captain(ghost, capn)
+    def ghost_captain_check(ghost, capn)
       ghost_capn = Hash.new
 
       if rand(100) < DoubloonScape::GHOST_CAPTAIN_CHANCE
@@ -477,6 +485,27 @@ module DoubloonScape
       end
 
       return ghost_capn
+    end
+
+    def keelhaul_check(cur)
+      keelhaul = Hash.new
+      if rand(1000) < (DoubloonScape:KEELHAUL_CHANCE*10)
+        capns = online_captains(cur)
+        if capns.count > 1
+          sailor = capns.sample
+          multiplier = level_rank(sailor)
+          pickpocket = @events.pickpocket(@captains[sailor], @captains[cur], multiplier)
+          if pickpocket[:success] == true
+            @captains[sailor].take_gold(pickpocket[:gold])
+            @treasure += pickpocket[:gold]
+            add_to_queue(sailor)
+            keelhaul[:captain] = @captains[cur].landlubber_name
+            keelhaul[:sailor] = @captains[sailor].landlubber_name
+            keelhaul[:amount] = pickpocket[:gold]
+          end
+        end
+      end
+      return keelhaul
     end
 
     def battle_check(cur=current_captain)
@@ -673,6 +702,12 @@ module DoubloonScape
         id = @save_queue.pop
         save_captain(id)
       end
+
+      if @chain_updated == true
+        @chain_updated = false
+        save_chain
+      end
     end
+
   end
 end
