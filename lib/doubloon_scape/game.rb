@@ -273,7 +273,7 @@ module DoubloonScape
             update_captain(capn)
             if @captains[capn].status == :offline
               if @captains[capn].offline == 1
-                events[:offline_captain] = true
+                events[:offline_captain] = {:offline => true}
               end
             else
               events[:pickpocket] = pickpocket_check(capn)
