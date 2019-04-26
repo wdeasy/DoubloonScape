@@ -739,12 +739,12 @@ module DoubloonScape
         @events.in_whirpool = false
       else
         amt = 0
-        @captains.each do |capn|
+        @captains.each do |id, capn|
           lost = capn.gold * (DoubloonScape::WHIRLPOOL_AMOUNT*0.01).ceil.to_i
           capn.take_gold(lost)
           amt += lost
         end
-        @treasure += gold
+        @treasure += amt
         whirlpool = {:escape => false, :amount => amt}
       end
 
