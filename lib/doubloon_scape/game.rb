@@ -728,7 +728,7 @@ module DoubloonScape
           amt += lost
         end
         @treasure += gold
-        whirlpool = {:escape => false, :amount = amt}
+        whirlpool = {:escape => false, :amount => amt}
       end
 
       return whirlpool
