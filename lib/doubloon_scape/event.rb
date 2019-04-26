@@ -215,6 +215,10 @@ module DoubloonScape
       @last_whirlpool + DoubloonScape::WHIRLPOOL_COOLDOWN.minutes
     end
 
+    def whirlpool_escape
+      @in_whirlpool = false
+    end
+
     def whirlpool_check
       whirlpool = {}
 

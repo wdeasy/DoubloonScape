@@ -736,7 +736,7 @@ module DoubloonScape
 
       if rand(1000) < (DoubloonScape::WHIRLPOOL_ESCAPE_CHANCE*10)
         whirlpool = {:escape => true}
-        @events.in_whirpool = false
+        @events.whirlpool_escape
       else
         amt = 0
         @captains.each do |id, capn|
