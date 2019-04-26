@@ -260,35 +260,40 @@ module DoubloonScape
 
     def do_turn
       events = {}
-      capn = current_captain
-      unless @pause == true
-        brig_check
-        events[:holiday] = @events.holiday_check
-        events[:event] = event_check(capn)
-        unless capn.nil?
-          update_captain(capn)
-          if @captains[capn].status == :offline
-            if @captains[capn].offline == 1
-              events[:offline_captain] = true
+      if @events.in_whirlpool == true
+        events[:whirlpool_escape] = whirlpool_escape_check
+      else
+        capn = current_captain
+        unless @pause == true
+          brig_check
+          events[:whirlpool] = @events.whirlpool_check
+          events[:holiday] = @events.holiday_check
+          events[:event] = event_check(capn)
+          unless capn.nil?
+            update_captain(capn)
+            if @captains[capn].status == :offline
+              if @captains[capn].offline == 1
+                events[:offline_captain] = true
+              end
+            else
+              events[:pickpocket] = pickpocket_check(capn)
+              events[:battle] = battle_check(capn)
+              events[:keelhaul] = keelhaul_check(capn)
+              events[:treasure] = treasure_check(capn)
+              events[:item] = @captains[capn].item_check
+              events[:level] = @captains[capn].level_check
+              unless events[:level].nil?
+                events[:tailwind] = tailwind_check(capn)
+              end
+              events[:record] = @captains[capn].record_check
             end
-          else
-            events[:pickpocket] = pickpocket_check(capn)
-            events[:battle] = battle_check(capn)
-            events[:keelhaul] = keelhaul_check(capn)
-            events[:treasure] = treasure_check(capn)
-            events[:item] = @captains[capn].item_check
-            events[:level] = @captains[capn].level_check
-            unless events[:level].nil?
-              events[:tailwind] = tailwind_check(capn)
-            end
-            events[:record] = @captains[capn].record_check
+            events[:achieve] = @captains[capn].achieve_check
+            add_to_queue(capn)
           end
-          events[:achieve] = @captains[capn].achieve_check
-          add_to_queue(capn)
         end
-
-        process_queue
       end
+
+      process_queue
       return events
     end
 
@@ -534,7 +539,7 @@ module DoubloonScape
 
     def treasure_check(cur=current_captain)
       treasure = {}
-      if rand(1000) < DoubloonScape::TREASURE_CHANCE
+      if rand(1000) < (DoubloonScape::TREASURE_CHANCE*10)
         treasure ={:captain => @captains[cur].landlubber_name, :gold => @treasure}
         @captains[cur].give_gold(@treasure)
         @captains[cur].achieves.add_value('treasures', 1)
@@ -709,5 +714,24 @@ module DoubloonScape
       end
     end
 
+    def whirlpool_escape
+      whirlpool = Hash.new
+
+      if rand(1000) < (DoubloonScape::WHIRLPOOL_ESCAPE_CHANCE*10)
+        whirlpool = {:escape => true}
+        @events.in_whirpool = false
+      else
+        amt = 0
+        @captains.each do |capn|
+          lost = capn.gold * (DoubloonScape::WHIRLPOOL_AMOUNT*0.01).ceil.to_i
+          capn.take_gold(lost)
+          amt += lost
+        end
+        @treasure += gold
+        whirlpool = {:escape => false, :amount = amt}
+      end
+
+      return whirlpool
+    end
   end
 end

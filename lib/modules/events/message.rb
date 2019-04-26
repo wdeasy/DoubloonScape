@@ -5,7 +5,7 @@ module Bot
       phrase = /\b[Ii]['’]?[Mm][ \t]+[Tt][Hh][Ee][ \t]+[Cc][Aa][Pp][Tt][Aa][Ii][Nn][ \t]+[Nn][Oo][Ww].?\b/
       message(contains: phrase) do |event|
         Bot.log "#{event.author.username}: #{event.content}"
-        unless Bot.is_legit(event) == false
+        unless Bot.is_legit(event) == false && DOUBLOONSCAPE.events.in_whirlpool == false
           if Time.now < DOUBLOONSCAPE.cooldown
             seconds = (DOUBLOONSCAPE.cooldown - Time.now).ceil
             Bot.send_chat("The Captain cannot be taken for #{seconds} more seconds.")

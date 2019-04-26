@@ -3,6 +3,8 @@ require 'time'
 
 module DoubloonScape
   class Event
+    attr_accessor :in_whirlpool
+
   	def initialize
       #atlantis gold modifier
   		@atlantis_start    = nil
@@ -17,11 +19,15 @@ module DoubloonScape
   		@bermuda_amount    = 0
 
       #contests
-      @last_mutiny = Time.now - DoubloonScape::MUTINY_COOLDOWN.minutes
-      @last_duel = Time.now - DoubloonScape::DUEL_COOLDOWN.minutes
+      @last_mutiny     = Time.now - DoubloonScape::MUTINY_COOLDOWN.minutes
+      @last_duel       = Time.now - DoubloonScape::DUEL_COOLDOWN.minutes
 
-      @last_battle = Time.now - DoubloonScape::BATTLE_COOLDOWN.minutes
+      @last_battle     = Time.now - DoubloonScape::BATTLE_COOLDOWN.minutes
       @last_pickpocket = Time.now - DoubloonScape::PICKPOCKET_COOLDOWN.minutes
+
+      #whirlpool
+      @last_whirlpool  = Time.now - DoubloonScape::WHIRLPOOL_COOLDOWN.minutes
+      @in_whirlpool    = false
   	end
 
     def mutiny_cooldown
@@ -205,12 +211,19 @@ module DoubloonScape
       return {:success => succeed, :captain => captain.landlubber_name, :rogue => rogue.landlubber_name, :gold => gold}
     end
 
-    def whirlpool
-
+    def whirlpool_cooldown
+      @last_whirlpool + DoubloonScape::WHIRLPOOL_COOLDOWN.minutes
     end
 
-    def keelhaul
-
+    def whirlpool_check
+      if Time.now > whirlpool_cooldown
+        if rand(1000) < (DoubloonScape::WHIRLPOOL_CHANCE*10)
+          @last_whirlpool = Time.now()
+          @in_whirlpool = true
+          return true
+        end
+      end
     end
+
   end
 end

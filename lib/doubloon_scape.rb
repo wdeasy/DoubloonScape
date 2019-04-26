@@ -21,25 +21,25 @@ module DoubloonScape
   AMOUNT     = 1
 
   #first captain of the day bonus
-  BONUS      = 10 #percent
+  BONUS      = 10          #percent
 
   #level math
   BASE 		   = 10
   MULTIPLIER = 1.1
 
   #how long to wait before being declared a deserter
-  OFFLINE            = 5 #minutes
+  OFFLINE            = 5   #minutes
 
   #events
   MUTINY_COOLDOWN    = 30  #minutes
   DUEL_COOLDOWN      = 30  #minutes
   MUTINEER_COUNT     = 3   #online players required
-  MUTINEER_BONUS     = 10  #percent awarded to mutineers if they win
+  MUTINEER_BONUS     = 5   #percent awarded to mutineers if they win
   DUEL_BONUS         = 10  #percent
 
   PICKPOCKET_COOLDOWN = 30 #minutes
   PICKPOCKET_CHANCE  = 1   #percent
-  PICKPOCKET_MAX     = 25  #percent
+  PICKPOCKET_MAX     = 20  #percent
   BATTLE_COOLDOWN    = 30  #minutes
   BATTLE_CHANCE      = 1   #percent
   BATTLE_WIN_AMOUNT  = 10  #percent
@@ -47,7 +47,7 @@ module DoubloonScape
   BATTLE_ITEM_CHANCE = 1   #percent
 
   #atlantis and bermuda triangle
-  ATLAMUDA_CHANCE    = 0.5   #percent
+  ATLAMUDA_CHANCE    = 0.5 #percent
   ATLANTIS_MOD_MAX   = 100 #percent
   BERMUDA_MOD_MAX    = 50  #percent
   BUFF_DURATION      = 60  #minutes
@@ -65,7 +65,7 @@ module DoubloonScape
   BRIG_DURATION      = 5   #minutes
 
   #jackpot
-  TREASURE_CHANCE    = 1   #out of 1000
+  TREASURE_CHANCE    = 0.1  #percent
 
   #tailwind (catchup mechanic)
   TAILWIND_MULTIPLIER = 1
@@ -82,4 +82,10 @@ module DoubloonScape
   #pirates day (increased item chance)
   PIRATES_DAY = "September 19"
   PIRATES_DAY_MULTIPLIER = 2
+
+  #whirlpool
+  WHIRLPOOL_COOLDOWN      = 1440 #minutes
+  WHIRLPOOL_CHANCE        = 0.5  #percent
+  WHIRLPOOL_AMOUNT        = 1    #percent
+  WHIRLPOOL_ESCAPE_CHANCE = 20   #percent
 end

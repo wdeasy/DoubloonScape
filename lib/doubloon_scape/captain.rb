@@ -142,7 +142,7 @@ module DoubloonScape
     def level_check
       if @xp >= @next_level
         @level += 1
-        @xp = 0
+        @xp = @xp - @next_level
         @next_level = calc_level_up
         @achieves.set_values('levels', @level)
         return {:name => @name, :level => @level}
