@@ -12,6 +12,10 @@ module DoubloonScape
         @tag = tag
       end
 
+      #next season add achievements for:
+      #times in brig
+      #lootboxes looted
+
       def is_active
         active = false
         case @activation
