@@ -216,14 +216,17 @@ module DoubloonScape
     end
 
     def whirlpool_check
+      whirlpool = {}
+
       if Time.now > whirlpool_cooldown
         if rand(1000) < (DoubloonScape::WHIRLPOOL_CHANCE*10)
           @last_whirlpool = Time.now()
           @in_whirlpool = true
-          return true
+          whirlpool = {:whirlpool => true}
         end
       end
-    end
 
+      return whirlpool
+    end
   end
 end

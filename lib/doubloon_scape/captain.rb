@@ -171,13 +171,15 @@ module DoubloonScape
     end
 
     def bonus_check
+      winoday = {}
+
       if @start_time.nil? || !Date.parse(@start_time.to_s).today?
         bonus = (base_xp(@level) * (DoubloonScape::BONUS * 0.01)).floor.to_i
         @xp += bonus
-        return true
-      else
-        return nil
+        winoday = {:winoday => true}
       end
+
+      return winoday
     end
 
     def item_check

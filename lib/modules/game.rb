@@ -64,122 +64,44 @@ module Bot
 
   def self.send_events(events)
     events.each do |key, value|
-      unless value.nil?
+      unless value.nil? || value.empty?
         case key
         when :achieve
-          value.each do |name, description|
-            send_chat("Achievement Unlocked! #{name} - #{description}")
-          end
+          achieve_event(value)
         when :bonus
-          send_chat("First Captain of the Day Bonus!")
+          bonus_event(value)
         when :level
-          send_chat("#{value[:name]} has hit level #{value[:level]}!")
+          level_event(value)
         when :record
-          send_chat("#{value[:name]} has broken their previous record of #{minutes(value[:record])} min. spent as Captain!")
+          record_event(value)
         when :event
-          unless value.empty?
-            place = value[:place].upcase
-            unit = value[:unit] == :goldxp ? 'Gold and XP' : 'Time'
-            #modifier = value[:modifier] == :buff ? 'decreased' : 'increased'
-            modifier = 'increased'
-            if value[:place] == 'bermuda triangle' && value[:modifier] == :buff
-              modifier = 'decreased'
-            end
-            amount = value[:amount]
-            send_chat("#{place}! #{unit} #{modifier} by #{amount}% for the next #{DoubloonScape::BUFF_DURATION} mins.")
-          end
+          event_event(value)
         when :item
-          unless value.empty?
-            if value[:quality] == :unique
-              send_chat("#{value[:captain]} found a unique item! #{value[:name]}[#{value[:ilvl]}]")
-              send_chat("\"#{value[:description]}\"")
-            else
-              send_chat("#{value[:captain]} found a common #{value[:name]}[#{value[:ilvl]}].")
-            end
-          end
+          item_event(value)
         when :contest
-          unless value.empty?
-            case value[:event]
-            when :mutiny
-              mutineers = "#{value[:mutineers].join(", ")}"
-              send_chat("#{mutineers} think #{value[:captain]} is unworthy of the wheel and have called for a mutiny!")
-              if value[:success] == true
-                send_chat("The mutineers have overthrown #{value[:captain]} and gained #{DoubloonScape::MUTINEER_BONUS}% XP! #{value[:captain]} will spend the next #{DoubloonScape::BRIG_DURATION} mins in the brig.")
-              else
-                send_chat("#{value[:captain]} successfully held off the mutiny and secured Captain for the next #{DoubloonScape::WIN_TIME_ADDED} mins.")
-              end
-            when :duel
-              send_chat("#{value[:current_captain]} thinks #{value[:captain]} is unworthy of the wheel and challenges them to a duel!")
-              if value[:success] == true
-                send_chat("#{value[:current_captain]} defended their Captainship. #{value[:captain]} will spend the next #{DoubloonScape::BRIG_DURATION} mins in the brig.")
-              else
-                send_chat("#{value[:captain]} bested #{value[:current_captain]} in a duel and secured Captain for the next #{DoubloonScape::WIN_TIME_ADDED} mins.")
-              end
-            end
-          end
+          contest_event(value)
         when :treasure
-          unless value.empty?
-            send_chat("#{value[:captain]} has looted the treasure chest! It contained #{value[:gold]} gold!")
-          end
+          treasure_event(value)
         when :pickpocket
-          unless value.empty?
-            if value[:success] == true
-              send_chat("#{value[:rogue]} pickpocketed #{value[:gold]} gold from #{value[:captain]}!")
-            else
-              send_chat("#{value[:rogue]} tried to pickpocket #{value[:captain]} and failed.")
-            end
-          end
+          pickpocket_event(value)
         when :battle
-          unless value.empty?
-            send_chat("#{value[:enemy]} has set seige to the ship!")
-            if value[:success] == true
-              send_chat("#{value[:captain]} has sent #{value[:enemy]} to Davy Jones's Locker and gains #{DoubloonScape::BATTLE_WIN_AMOUNT}% XP!")
-              if !value[:item_name].nil?
-                send_chat("#{value[:captain]} claimed a trophy! #{value[:item_name]}, #{value[:item_description]}")
-              end
-            else
-              send_chat("#{value[:captain]} narrowly escaped from #{value[:enemy]}!")
-            end
-          end
+          battle_event(value)
         when :tailwind
-          unless value[:amount] == DoubloonScape::TAILWIND_MULTIPLIER
-            send_chat("TAILWIND! #{value[:captain]} is catching up by #{value[:amount]}x!")
-          end
+          tailwind_event(value)
         when :high_seas
-          unless value.empty?
-            if value[:high_seas] == true
-              send_chat("HIGH SEAS! The sailors are growing restless!")
-            else
-              send_chat("CALM WATERS! The sailors are content.")
-            end
-          end
+          high_seas_event(value)
         when :ghost_captain
-          unless value.empty?
-            send_chat("GHOST CAPTAIN! #{value[:ghost]} swindles #{value[:captain]} out of #{value[:amount]} gold!")
-          end
+          ghost_captain_event(value)
         when :keelhaul
-          unless value.empty?
-            send_chat("#{value[:captain]} has called for #{value[:sailor]} to be KEELHAULED!")
-            send_chat("#{value[:amount]} gold falls into the sea while overboard.")
-          end
+          keelhaul_event(value)
         when :whirlpool
-          unless value.empty?
-            send_chat("Grab something and hold on tight, the ship is circling a WHIRLPOOL!")
-          end
+          whirlpool_event(value)
         when :whirlpool_escape
-          if value[:escape] == true
-            send_chat("The ship has escaped the WHIRLPOOL!")
-          else
-            send_chat("The ship tips on its side! #{value[:amount]} gold falls into the abyss!")
-          end
+          whirlpool_escape_event(value)
         when :holiday
-          unless value.empty?
-            if value[:pirates_day] == true
-              send_chat("PIRATES DAY! Increased chance of finding items today! \@here")
-            end
-          end
+          holiday_event(value)
         when :offline_captain
-          Bot.set_game(nil)
+          offline_captain_event(value)
         end
       end
     end
