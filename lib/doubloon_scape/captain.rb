@@ -182,8 +182,8 @@ module DoubloonScape
       return winoday
     end
 
-    def item_check
-      item = @inv.item_check(@level)
+    def item_check(lvl=@level)
+      item = @inv.item_check(lvl)
       unless item.empty?
         item[:captain] = @name
         if item[:quality] == :unique

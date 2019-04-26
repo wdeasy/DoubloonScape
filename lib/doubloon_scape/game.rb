@@ -518,7 +518,7 @@ module DoubloonScape
       loot = Hash.new
         if rand(1000) < (DoubloonScape::LOOTBOX_CHANCE*10) && @captains[cur].gold > DoubloonScape::LOOTBOX_PRICE
           until !loot.empty?
-            loot = @captains[cur].item_check
+            loot = @captains[cur].item_check(60)
           end
           @captains[cur].take_gold(DoubloonScape::LOOTBOX_PRICE)
           @treasure += DoubloonScape::LOOTBOX_PRICE
