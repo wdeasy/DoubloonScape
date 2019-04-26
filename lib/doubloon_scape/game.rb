@@ -727,7 +727,7 @@ module DoubloonScape
       end
     end
 
-    def whirlpool_escape
+    def whirlpool_escape_check
       whirlpool = Hash.new
 
       if rand(1000) < (DoubloonScape::WHIRLPOOL_ESCAPE_CHANCE*10)
