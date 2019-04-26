@@ -727,6 +727,10 @@ module DoubloonScape
       end
     end
 
+    def in_whirlpool
+      return @events.in_whirlpool
+    end
+
     def whirlpool_escape_check
       whirlpool = Hash.new
 
