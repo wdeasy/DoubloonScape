@@ -88,4 +88,8 @@ module DoubloonScape
   WHIRLPOOL_CHANCE        = 0.5  #percent
   WHIRLPOOL_AMOUNT        = 1    #percent
   WHIRLPOOL_ESCAPE_CHANCE = 20   #percent
+
+  #lootbox
+  LOOTBOX_PRICE           = 500  #gold
+  LOOTBOX_CHANCE          = 1    #percent
 end

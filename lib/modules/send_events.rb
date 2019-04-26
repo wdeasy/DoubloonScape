@@ -85,7 +85,9 @@ module Bot
   end
 
   def self.tailwind_event(value)
-    send_chat("TAILWIND! #{value[:captain]} is catching up by #{value[:amount]}x!")
+    unless value[:amount] == DoubloonScape::TAILWIND_MULTIPLIER
+      send_chat("TAILWIND! #{value[:captain]} is catching up by #{value[:amount]}x!")
+    end
   end
 
   def self.high_seas_event(value)
@@ -114,6 +116,16 @@ module Bot
       send_chat("The ship has escaped the WHIRLPOOL!")
     else
       send_chat("The ship tips on its side! #{value[:amount]} gold falls into the abyss!")
+    end
+  end
+
+  def self.lootbox_event(value)
+    send_chat("#{value[:captain]} purchases a lootbox for #{DoubloonScape::LOOTBOX_PRICE} gold.")
+    if value[:quality] == :unique
+      send_chat("It contained a unique item! #{value[:name]}[#{value[:ilvl]}]")
+      send_chat("\"#{value[:description]}\"")
+    else
+      send_chat("It contained a common #{value[:name]}[#{value[:ilvl]}].")
     end
   end
 

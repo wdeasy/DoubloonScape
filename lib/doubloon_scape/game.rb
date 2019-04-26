@@ -282,6 +282,7 @@ module DoubloonScape
               events[:treasure] = treasure_check(capn)
               events[:item] = @captains[capn].item_check
               events[:level] = @captains[capn].level_check
+              events[:lootbox] = lootbox_check(capn)
               unless events[:level].nil?
                 events[:tailwind] = tailwind_check(capn)
               end
@@ -511,6 +512,18 @@ module DoubloonScape
         end
       end
       return keelhaul
+    end
+
+    def lootbox_check(cur)
+      loot = Hash.new
+        if rand(1000) < (DoubloonScape::LOOTBOX_CHANCE*10) && @captains[cur].gold > DoubloonScape::LOOTBOX_PRICE
+          until !loot.empty?
+            loot = @captains[capn].item_check
+          end
+          @captains[cur].take_gold(DoubloonScape::LOOTBOX_PRICE)
+          @treasure += DoubloonScape::LOOTBOX_PRICE        
+        end
+      return loot
     end
 
     def battle_check(cur=current_captain)

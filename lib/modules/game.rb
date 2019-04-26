@@ -98,6 +98,8 @@ module Bot
           whirlpool_event(value)
         when :whirlpool_escape
           whirlpool_escape_event(value)
+        when :lootbox
+          lootbox_event(value)
         when :holiday
           holiday_event(value)
         when :offline_captain
