@@ -680,8 +680,10 @@ module DoubloonScape
 
         sorted[:gold].each do |gold_id, gold|
           if gold_id == id
-            weighted_gold = (max[:gold][1] * (gold.to_f / max[:gold][1]))
-            score += weighted_gold
+            unless gold < 1              
+              weighted_gold = (max[:gold][1] * (gold.to_f / max[:gold][1]))
+              score += weighted_gold
+            end
           end
         end
 
@@ -689,7 +691,7 @@ module DoubloonScape
           score = 0.to_f
         end
 
-        leaderboard[capn.landlubber_name] = {:score => score.floor.to_i, :level => capn.level, :ilvl => capn.inv.ilvl, :gold => capn.gold}
+        leaderboard[capn.landlubber_name] = {:score => score.floor.to_i, :level => capn.level, :ilvl => capn.inv.ilvl, :gold => capn.gold.floor.to_i}
       end
 
       sorted_leaderboard = leaderboard.sort_by {|name, hash| hash[:score] }.reverse
@@ -740,7 +742,7 @@ module DoubloonScape
       else
         amt = 0
         @captains.each do |id, capn|
-          lost = capn.gold * (DoubloonScape::WHIRLPOOL_AMOUNT*0.01).ceil.to_i
+          lost = (capn.gold * (DoubloonScape::WHIRLPOOL_AMOUNT*0.01)).ceil.to_i
           capn.take_gold(lost)
           amt += lost
         end
