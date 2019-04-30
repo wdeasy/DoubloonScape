@@ -15,6 +15,10 @@ module DoubloonScape
       #next season add achievements for:
       #times in brig
       #lootboxes looted
+      #max level achievement
+      #prestige?
+      #unique item in all slots
+      #x number of uniques equipped
 
       def is_active
         active = false

@@ -145,13 +145,13 @@ module DoubloonScape
 
     def mutiny(captain, mutineers)
       @last_mutiny = Time.now
-      captains_roll = rand(captain.inv.ilvl + captain.achieves.count)
+      captains_roll = rand(captain.roll)
       succeed = false
       names = []
 
       mutineers.each do |id, mutineer|
         names.push(mutineer.landlubber_name)
-        roll = rand(mutineer.inv.ilvl + mutineer.achieves.count)
+        roll = rand(mutineer.roll)
         if roll > captains_roll
           succeed = true
         end
@@ -162,8 +162,8 @@ module DoubloonScape
 
     def duel(captain, current_captain)
       @last_duel = Time.now
-      captains_roll = rand(captain.inv.ilvl + captain.achieves.count)
-      current_captains_roll = rand(current_captain.inv.ilvl + current_captain.achieves.count)
+      captains_roll = rand(captain.roll)
+      current_captains_roll = rand(current_captain.roll)
       succeed = true
 
       if current_captains_roll < captains_roll

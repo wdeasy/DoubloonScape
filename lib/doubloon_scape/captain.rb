@@ -57,17 +57,17 @@ module DoubloonScape
     end
 
     def give_gold(amount)
-      @gold += amount
+      @gold += amount.floor.to_i
       @achieves.set_values('gold', @gold.floor.to_i)
     end
 
     def take_gold(amount)
-      @gold -= amount
+      @gold -= amount.floor.to_i
       @achieves.set_values('gold', @gold.floor.to_i)
     end
 
     def give_xp(amount)
-      @xp += amount
+      @xp += amount.round(3)
     end
 
     def update_current(time)
@@ -140,7 +140,7 @@ module DoubloonScape
     end
 
     def level_check
-      if @xp >= @next_level
+      if @xp >= @next_level && @level < DoubloonScape::MAX_LEVEL
         @level += 1
         @xp = @xp - @next_level
         @next_level = calc_level_up
@@ -198,7 +198,7 @@ module DoubloonScape
     end
 
     def roll
-      @inv.ilvl
+      @inv.ilvl + @achieves.count
     end
 
     def record

@@ -86,10 +86,13 @@ module DoubloonScape
   #whirlpool
   WHIRLPOOL_COOLDOWN      = 1440 #minutes
   WHIRLPOOL_CHANCE        = 0.5  #percent
-  WHIRLPOOL_AMOUNT        = 1    #percent
+  WHIRLPOOL_AMOUNT        = 0.5  #percent
   WHIRLPOOL_ESCAPE_CHANCE = 20   #percent
 
   #lootbox
-  LOOTBOX_PRICE           = 500  #gold
+  LOOTBOX_PRICE           = 250  #gold
   LOOTBOX_CHANCE          = 0.5  #percent
+
+  #max level
+  MAX_LEVEL               = 60   #level
 end

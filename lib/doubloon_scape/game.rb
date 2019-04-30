@@ -28,6 +28,9 @@ module DoubloonScape
       #treasure
       @treasure = 1
 
+      #lootbox bank
+      @bank = 0
+
       #high seas
       @high_seas = false
 
@@ -185,6 +188,7 @@ module DoubloonScape
           @store['captains'] = capns
           @store['chain']    = @chain
           @store['treasure'] = @treasure
+          @store['bank']     = @bank
         end
       rescue PStore::Error => msg
         log "Unable to save all captains."
@@ -216,6 +220,7 @@ module DoubloonScape
         end
         @chain = @store.fetch('chain', Array.new(50))
         @treasure = @store.fetch('treasure', 1)
+        @bank = @store.fetch('bank', 0)
       end
       cur = current_captain
       if cur.nil? || @captains[cur].status == :offline
@@ -518,10 +523,10 @@ module DoubloonScape
       loot = Hash.new
         if rand(1000) < (DoubloonScape::LOOTBOX_CHANCE*10) && @captains[cur].gold > DoubloonScape::LOOTBOX_PRICE
           until !loot.empty?
-            loot = @captains[cur].item_check(60)
+            loot = @captains[cur].item_check(DoubloonScape::MAX_LEVEL)
           end
           @captains[cur].take_gold(DoubloonScape::LOOTBOX_PRICE)
-          @treasure += DoubloonScape::LOOTBOX_PRICE
+          @bank += DoubloonScape::LOOTBOX_PRICE
         end
       return loot
     end
@@ -666,22 +671,25 @@ module DoubloonScape
 
         sorted[:level].each do |level_id, level|
           if level_id == id
-            weighted_level = (max[:gold][1] * (level.to_f / max[:level][1]))
+            #weighted_level = (max[:gold][1] * (level.to_f / max[:level][1]))
+            weighted_level = (100*(DoubloonScape::MULTIPLIER**(level-1)))
             score += weighted_level
           end
         end
 
         sorted[:ilvl].each do |ilvl_id, ilvl|
           if ilvl_id == id
-            weighted_ilvl = (max[:gold][1] * (ilvl.to_f / max[:ilvl][1]))
+            #weighted_ilvl = (max[:gold][1] * (ilvl.to_f / max[:ilvl][1]))
+            weighted_ilvl = 25 * ilvl
             score += weighted_ilvl
           end
         end
 
         sorted[:gold].each do |gold_id, gold|
           if gold_id == id
-            unless gold < 1              
-              weighted_gold = (max[:gold][1] * (gold.to_f / max[:gold][1]))
+            unless gold < 1
+              #weighted_gold = (max[:gold][1] * (gold.to_f / max[:gold][1]))
+              weighted_gold = gold
               score += weighted_gold
             end
           end
@@ -742,12 +750,12 @@ module DoubloonScape
       else
         amt = 0
         @captains.each do |id, capn|
-          lost = (capn.gold * (DoubloonScape::WHIRLPOOL_AMOUNT*0.01)).ceil.to_i
+          lost = (capn.gold * (DoubloonScape::WHIRLPOOL_AMOUNT*0.01)).floor.to_i
           capn.take_gold(lost)
           amt += lost
         end
         @treasure += amt
-        whirlpool = {:escape => false, :amount => amt}
+        whirlpool = {:escape => false, :amount => amt.floor.to_i}
       end
 
       return whirlpool

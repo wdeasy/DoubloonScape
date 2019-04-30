@@ -10,6 +10,9 @@ module Bot
   end
 
   def self.level_event(value)
+    if value[:level] == DoubloonScape::MAX_LEVEL
+      send_chat("#{value[:name]} has hit MAX LEVEL!")
+    end
     send_chat("#{value[:name]} has hit level #{value[:level]}!")
   end
 
@@ -113,7 +116,7 @@ module Bot
 
   def self.whirlpool_escape_event(value)
     if value[:escape] == true
-      send_chat("The ship has escaped the WHIRLPOOL!")
+      send_chat("The ship has escaped from the WHIRLPOOL!")
     else
       send_chat("The ship tips on its side! #{value[:amount]} gold falls into the abyss!")
     end
