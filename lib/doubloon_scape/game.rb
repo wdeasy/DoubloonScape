@@ -578,7 +578,9 @@ module DoubloonScape
       sorted = Hash.new
 
       capns.each do |id, capn|
-        level[id] = capn.level
+        unless capns[cur].level == capn.level && cur != id
+          level[id] = capn.level
+        end
       end
 
       sorted = level.sort_by { |id, level| level }.reverse

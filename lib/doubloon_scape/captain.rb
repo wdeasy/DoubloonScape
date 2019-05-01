@@ -133,9 +133,9 @@ module DoubloonScape
 
     def calc_level_up
       if @level > 60
-        @next_level = base_xp(@level) + (1440 * (@level - 60))
+        @next_level = (base_xp(@level) + (1440 * (@level - 60))).round(3)
       else
-        @next_level = base_xp(@level)
+        @next_level = base_xp(@level).round(3)
       end
     end
 
