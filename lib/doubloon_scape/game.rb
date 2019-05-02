@@ -255,7 +255,7 @@ module DoubloonScape
         time = (Time.now - @captains[id].last_update)
         if id == current_captain
           @captains[id].give_xp(amount(id))
-          @captains[id].give_gold(@captains[id].level + @events.amount_modifier)
+          @captains[id].give_gold(@captains[id].level * (1 + @events.amount_modifier))
         end
         @captains[id].update_current(time)
         @captains[id].update_total(time)
