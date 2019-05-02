@@ -32,6 +32,8 @@ module Bot
       set_topic("Who is the Captain of this Ship!?")
     when :captainoffline
       set_topic("#{DOUBLOONSCAPE.current_name('landlubber')} has abandoned ship!")
+    when :inwhirlpool
+      set_topic("The ship is caught in a whirlpool!")
     else
       level = status[:level]
       gold  = status[:gold].floor.to_i

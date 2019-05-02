@@ -608,12 +608,14 @@ module DoubloonScape
 
     def status
       cur = current_captain
-      if @paused == true
+      if @paused
         return :paused
       elsif cur.nil?
         return :nocaptain
       elsif @captains[cur].status == :offline
         return :captainoffline
+      elsif @events.in_whirlpool
+        return :inwhirlpool
       else
         capn = @captains[cur]
         return {:level => capn.level, :gold => capn.gold, :current => capn.current, :next => capn.next}
