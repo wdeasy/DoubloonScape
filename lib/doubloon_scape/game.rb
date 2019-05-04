@@ -577,7 +577,7 @@ module DoubloonScape
 
     def level_rank(cur)
       capns = leaderboard
-      rank = capns.find_index { |k,_| k== cur }+1
+      rank = capns.find_index { |k,_| k== @captains[cur].landlubber_name }+1
       return rank
     end
 
