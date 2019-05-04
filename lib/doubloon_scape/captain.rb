@@ -183,7 +183,7 @@ module DoubloonScape
     end
 
     def item_check(lvl=@level)
-      item = @inv.item_check(lvl)
+      item = @inv.item_check(lvl, @tailwind)
       unless item.empty?
         item[:captain] = @name
         if item[:quality] == :unique

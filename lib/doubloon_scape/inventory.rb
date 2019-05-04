@@ -89,7 +89,7 @@ module DoubloonScape
 
 	  end
 
-	  def item_check(level)
+	  def item_check(level, tailwind=1)
 	  	item = {}
 
 			multiplier = 1
@@ -97,7 +97,7 @@ module DoubloonScape
 				multiplier = DoubloonScape::PIRATES_DAY_MULTIPLIER
 			end
 
-	  	if rand(100/multiplier) < DoubloonScape::ITEM_CHANCE
+	  	if rand(100/multiplier) < (DoubloonScape::ITEM_CHANCE * tailwind)
 	  		ilvl = 1
 	  		slot = ['Head', 'Chest', 'Hands', 'Legs', 'Pet', 'Trinket', 'Main Hand', 'Off Hand'].sample
 	  		(1..level*DoubloonScape::ITEM_LEVEL).each do |i|

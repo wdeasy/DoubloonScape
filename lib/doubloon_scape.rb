@@ -91,7 +91,7 @@ module DoubloonScape
 
   #lootbox
   LOOTBOX_PRICE           = 500  #gold
-  LOOTBOX_CHANCE          = 0.5  #percent
+  LOOTBOX_CHANCE          = 1    #percent
 
   #max level
   MAX_LEVEL               = 60   #level

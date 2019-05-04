@@ -557,7 +557,9 @@ module DoubloonScape
 
     def treasure_check(cur=current_captain)
       treasure = {}
-      if rand(1000) < (DoubloonScape::TREASURE_CHANCE*10)
+      roll = rand(1000)
+      puts "treasure chance roll: #{roll}"
+      if roll < (DoubloonScape::TREASURE_CHANCE * 10)
         treasure ={:captain => @captains[cur].landlubber_name, :gold => @treasure}
         @captains[cur].give_gold(@treasure)
         @captains[cur].achieves.add_value('treasures', 1)
@@ -569,29 +571,9 @@ module DoubloonScape
     end
 
     def level_rank(cur)
-      capns = @captains
-      if cur.nil? || capns.empty?
-        return 1
-      end
-
-      level = Hash.new
-      sorted = Hash.new
-
-      capns.each do |id, capn|
-        unless capns[cur].level == capn.level && cur != id
-          level[id] = capn.level
-        end
-      end
-
-      sorted = level.sort_by { |id, level| level }.reverse
-
-      rank = sorted.find_index { |k,_| k== cur }+1
-
-      if rank < 1
-        return 1
-      else
-        return rank
-      end
+      capns = leaderboard
+      rank = capns.find_index { |k,_| k== cur }+1
+      return rank
     end
 
     def tailwind_check(cur)
