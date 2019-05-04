@@ -183,11 +183,16 @@ module DoubloonScape
           capns = Array.new
           @captains.each do |id, capn|
             capns.push(id)
+            log "saving #{capn.landlubber_name}..."
             @store[id] = capn
           end
+          log "saving captains..."
           @store['captains'] = capns
+          log "saving chain..."
           @store['chain']    = @chain
+          log "saving treasure..."
           @store['treasure'] = @treasure
+          log "saving bank..."
           @store['bank']     = @bank
         end
       rescue PStore::Error => msg
