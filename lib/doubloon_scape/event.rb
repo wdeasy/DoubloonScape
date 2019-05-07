@@ -28,6 +28,10 @@ module DoubloonScape
       #whirlpool
       @last_whirlpool  = Time.now - DoubloonScape::WHIRLPOOL_COOLDOWN.minutes
       @in_whirlpool    = false
+
+      #raid
+      @last_raid       = Time.now - DoubloonScape::RAID_COOLDOWN.minutes
+      @in_raid         = false
   	end
 
     def mutiny_cooldown
@@ -222,7 +226,7 @@ module DoubloonScape
     def whirlpool_check
       whirlpool = {}
 
-      if Time.now > whirlpool_cooldown
+      if Time.now > whirlpool_cooldown && @in_raid == false
         if rand(1000) < (DoubloonScape::WHIRLPOOL_CHANCE*10)
           @last_whirlpool = Time.now()
           @in_whirlpool = true
@@ -231,6 +235,24 @@ module DoubloonScape
       end
 
       return whirlpool
+    end
+
+    def raid_cooldown
+      @last_raid + DoubloonScape::RAID_COOLDOWN.minutes
+    end
+
+    def raid_check
+      raid = {}
+
+      if Time.now > raid_cooldown && @in_whirlpool == false
+        if rand(1000) < (DoubloonScape::RAID_CHANCE*10)
+          @last_raid = Time.now()
+          @in_raid = true
+          raid = {:raid => true}
+        end
+      end
+
+      return raid
     end
   end
 end

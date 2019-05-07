@@ -8,6 +8,8 @@ module Bot
         unless Bot.is_legit(event) == false
           if DOUBLOONSCAPE.in_whirlpool == true
             Bot.send_chat("The ship is caught in a whirlpool! There's no time for that now!")
+          elsif DOUBLOONSCAPE.in_raid == true
+            Bot.send_chat("The ship is on a raid! There's no time for that now!")
           elsif Time.now < DOUBLOONSCAPE.cooldown
             seconds = (DOUBLOONSCAPE.cooldown - Time.now).ceil
             Bot.send_chat("The Captain cannot be taken for #{seconds} more seconds.")

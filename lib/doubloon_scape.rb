@@ -74,7 +74,7 @@ module DoubloonScape
   HIGH_SEAS_MULTIPLIER = 2
 
   #ghost captain (previous offline captain)
-  GHOST_CAPTAIN_CHANCE = 100 #percent
+  GHOST_CAPTAIN_CHANCE = 25 #percent
 
   #keelhaul
   KEELHAUL_CHANCE = 1
@@ -95,4 +95,14 @@ module DoubloonScape
 
   #max level
   MAX_LEVEL               = 60   #level
+
+  #raid
+  RAID_COOLDOWN           = 1440 #minutes
+  RAID_CHANCE             = 100  #percent
+  BOSS_HP_MODIFIER        = 10   #multiplier
+  BOSS_LVL_MODIFIER       = 1    #number
+  RAID_BOSS_ATTACKS       = 1    #number
+  RAID_BOSS_DAMAGE        = 100  #percent
+  CRIT_STRIKE_CHANCE      = 5    #percent
+  CRIT_STRIKE_DAMAGE      = 200  #percent
 end

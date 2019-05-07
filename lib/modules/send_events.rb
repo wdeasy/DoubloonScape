@@ -122,6 +122,62 @@ module Bot
     end
   end
 
+  def self.raid_event(value)
+    send_chat("The ship docks at a mysterious port. It's time for a RAID!")
+  end
+
+  def self.in_raid_event(value)
+    #list current boss
+    msg = "Current Boss: #{value[:current_boss]}\n"
+    #list attacks
+    value[:attacks].each do |attack|
+      if attack[:damage] == 0
+        msg += "#{attack[:attacker]} tries to hit #{attack[:defender]} but misses!\n"
+      else
+        msg += "#{attack[:crit]? ? "[CRIT!]" : ""}#{attack[:attacker]} hits #{attack[:defender]} with #{attack[:weapon]} for #{attack[:damage]} damage.\n"
+        if !attack[:dead_raiders].nil? && attack[:dead_raiders].include? attack[:defender]
+          msg += "#{attack[:defender]} has been knocked unconscious!\n"
+        end
+      end
+    end
+    #if boss dead, list loots
+
+    if value[:current_boss_hp] < 1
+      msg += "The raiders have defeated #{value[:current_boss]}\n"
+    end
+
+    unless value[:xp].nil?
+      value[:xp].each do |xp|
+        msg += "#{xp[:name]} receives #{xp[:xp]} XP!\n"
+      end
+    end
+
+    unless value[:loot].nil?
+      value[:loot].each do |loot|
+        if loot[:quality] == :unique
+          msg += "#{loot[:captain]} loots a unique item! #{loot[:name]}[#{loot[:ilvl]}]\n"
+          msg += "\"#{loot[:description]}\"")
+        else
+          msg += "#{loot[:captain]} loots a common #{loot[:name]}[#{loot[:ilvl]}].\n"
+        end
+      end
+    end
+
+    unless value[:gold].nil?
+      value[:gold].each do |gold|
+        msg += "#{gold[:name]} receives #{gold[:xp]} XP!\n"
+      end
+    end
+
+    if value[:status] == :won
+      msg += "The raiders have defeated all bosses and find the lootbox bank unguarded!\n"
+      msg += "The raiders find #{value[:bank][:total]} gold and split it with the ship!\n"
+    elsif value[:status] == :lost
+      msg += "The raiders have been thrown back in the ship and pushed out to sea.\n"
+    end
+    send_chat(msg)
+  end
+
   def self.lootbox_event(value)
     send_chat("#{value[:captain]} purchases a lootbox for #{DoubloonScape::LOOTBOX_PRICE} gold.")
     if value[:quality] == :unique

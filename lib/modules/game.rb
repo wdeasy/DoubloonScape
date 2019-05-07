@@ -3,12 +3,17 @@ module Bot
     last_tick = Time.now
     disc_count = 0
     while true do
+      log "top of loop" if DOUBLOONSCAPE.debug
       Thread.stop if $exit
       if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false && DOUBLOONSCAPE.locked == false
+        log "update last tick" if DOUBLOONSCAPE.debug
         last_tick = Time.now
         if BOT.connected?
+          log "update captain status" if DOUBLOONSCAPE.debug
           DOUBLOONSCAPE.update_captains_status(get_members_status)
+          log "do turn" if DOUBLOONSCAPE.debug
           send_events(DOUBLOONSCAPE.do_turn)
+          log "update topic" if DOUBLOONSCAPE.debug
           update_topic(DOUBLOONSCAPE.status)
           disc_count = 0
 
@@ -19,8 +24,11 @@ module Bot
           disc_count+=1
           Bot.log "Skipping tick. Bot is disconnected. [#{disc_count}]"
         end
+      else
+        log "#{Time.now} - #{last_tick} >= #{DOUBLOONSCAPE.seconds}" if @debug
       end
       sleep 0.1
+      log "bottom of loop" if @debug
     end
   end
 
@@ -34,6 +42,13 @@ module Bot
       set_topic("#{DOUBLOONSCAPE.current_name('landlubber')} has abandoned ship!")
     when :inwhirlpool
       set_topic("The ship is caught in a whirlpool!")
+    when :inraid
+      raid_info = DOUBLOONSCAPE.raid_info
+      if raid_info[:current_boss].nil?
+        set_topic("Captains Alive: #{raid_info[:captains_alive]}")
+      else
+        set_topic("Current Boss: #{raid_info[:boss_name]}. HP: #{raid_info[:boss_hp]}. Captains Alive: #{raid_info[:captains_alive]}")
+      end
     else
       level = status[:level]
       gold  = status[:gold].floor.to_i
@@ -100,6 +115,10 @@ module Bot
           whirlpool_event(value)
         when :whirlpool_escape
           whirlpool_escape_event(value)
+        when :raid
+          raid_event(value)
+        when :in_raid
+          in_raid_event(value)
         when :lootbox
           lootbox_event(value)
         when :holiday
