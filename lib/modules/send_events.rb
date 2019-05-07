@@ -134,8 +134,8 @@ module Bot
       if attack[:damage] == 0
         msg += "#{attack[:attacker]} tries to hit #{attack[:defender]} but misses!\n"
       else
-        msg += "#{attack[:crit]? ? "[CRIT!]" : ""}#{attack[:attacker]} hits #{attack[:defender]} with #{attack[:weapon]} for #{attack[:damage]} damage.\n"
-        if !attack[:dead_raiders].nil? && attack[:dead_raiders].include? attack[:defender]
+        msg += "#{attack[:crit] ? "[CRIT!]" : ""}#{attack[:attacker]} hits #{attack[:defender]} with #{attack[:weapon]} for #{attack[:damage]} damage.\n"
+        if !attack[:dead_raiders].nil? && (attack[:dead_raiders].include? attack[:defender])
           msg += "#{attack[:defender]} has been knocked unconscious!\n"
         end
       end
@@ -156,7 +156,7 @@ module Bot
       value[:loot].each do |loot|
         if loot[:quality] == :unique
           msg += "#{loot[:captain]} loots a unique item! #{loot[:name]}[#{loot[:ilvl]}]\n"
-          msg += "\"#{loot[:description]}\"")
+          msg += "\"#{loot[:description]}\""
         else
           msg += "#{loot[:captain]} loots a common #{loot[:name]}[#{loot[:ilvl]}].\n"
         end
