@@ -3,7 +3,7 @@ require 'time'
 
 module DoubloonScape
   class Event
-    attr_accessor :in_whirlpool
+    attr_accessor :in_whirlpool, :in_raid
 
   	def initialize
       #atlantis gold modifier
