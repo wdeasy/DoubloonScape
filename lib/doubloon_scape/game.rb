@@ -816,7 +816,7 @@ module DoubloonScape
         raid[:loot] = Array.new
         raid[:xp]   = Array.new
 
-        raid[:raiders] each do |raider|
+        raid[:raiders].each do |raider|
           #give xp
           amt = @captains[raider.id].next_level * (DoubloonScape::RAID_WIN_AMOUNT * 0.01)
           @captains[raider.id].give_xp(amt)
@@ -830,7 +830,7 @@ module DoubloonScape
           raid[:loot].push(loot)
 
           #give gold
-          amt = rand(DoubloonScape::RAID_GOLD_AMOUNT
+          amt = rand(DoubloonScape::RAID_GOLD_AMOUNT)
           @captains[raider.id].give_gold(amt)
           raid[:gold].push(:name => raider.name, :amount => amt)
           add_to_queue(raider.id)
@@ -855,5 +855,7 @@ module DoubloonScape
 
       return raid
     end
+
+
   end
 end
