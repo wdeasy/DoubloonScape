@@ -3,7 +3,6 @@ module Bot
     last_tick = Time.now
     disc_count = 0
     while true do
-      log "top of loop" if DOUBLOONSCAPE.debug
       Thread.stop if $exit
       if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false && DOUBLOONSCAPE.locked == false
         log "update last tick" if DOUBLOONSCAPE.debug
@@ -25,10 +24,9 @@ module Bot
           Bot.log "Skipping tick. Bot is disconnected. [#{disc_count}]"
         end
       else
-        log "#{Time.now} - #{last_tick} >= #{DOUBLOONSCAPE.seconds}" if DOUBLOONSCAPE.debug
+        #log "#{Time.now - last_tick} <= #{DOUBLOONSCAPE.seconds}" if DOUBLOONSCAPE.debug
       end
       sleep 0.1
-      log "bottom of loop" if DOUBLOONSCAPE.debug
     end
   end
 
