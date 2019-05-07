@@ -25,10 +25,10 @@ module Bot
           Bot.log "Skipping tick. Bot is disconnected. [#{disc_count}]"
         end
       else
-        log "#{Time.now} - #{last_tick} >= #{DOUBLOONSCAPE.seconds}" if @debug
+        log "#{Time.now} - #{last_tick} >= #{DOUBLOONSCAPE.seconds}" if DOUBLOONSCAPE.debug
       end
       sleep 0.1
-      log "bottom of loop" if @debug
+      log "bottom of loop" if DOUBLOONSCAPE.debug
     end
   end
 
