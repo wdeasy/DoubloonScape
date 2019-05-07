@@ -856,6 +856,9 @@ module DoubloonScape
       return raid
     end
 
+    def debug
+      return @debug
+    end
 
   end
 end
