@@ -100,18 +100,23 @@ module DoubloonScape
 	  	if rand(100/multiplier) < (DoubloonScape::ITEM_CHANCE * tailwind)
 	  		ilvl = 1
 	  		slot = ['Head', 'Chest', 'Hands', 'Legs', 'Pet', 'Trinket', 'Main Hand', 'Off Hand'].sample
-	  		(1..level*DoubloonScape::ITEM_LEVEL).each do |i|
-	  			if rand(DoubloonScape::BETTER_ITEM_CHANCE**(i/4)) < 1
-	  				ilvl = i
-	  			end
-	  		end
+	  		# (1..level*DoubloonScape::ITEM_LEVEL).each do |i|
+	  		# 	if rand(DoubloonScape::BETTER_ITEM_CHANCE**(i/4)) < 1
+	  		# 		ilvl = i
+	  		# 	end
+	  		# end
+
+				if rand(1000) < (DoubloonScape::BETTER_ITEM_CHANCE*10)
+					ilvl = rand(inventory[slot].ilvl..(inventory[slot].ilvl * DoubloonScape::ITEM_LEVEL))
+				end
+
 	  		if ilvl > inventory[slot].ilvl
 	  			if rand(100) < DoubloonScape::UNIQUE_ITEM_CHANCE
 	  				unique = @unique.reject {|x| x[:slot] != slot }
 	  				unique.reject! {|x| level < x[:level]}
 	  				unique_item = unique.sample
 	  				unless unique_item.nil?
-	  				  ilvl = rand(ilvl..(level * DoubloonScape::UNIQUE_ITEM_MAX))
+	  				  ilvl = rand(ilvl..(ilvl * DoubloonScape::UNIQUE_ITEM_MAX))
 	  				  item = {:quality => :unique, :name => unique_item[:name], :description => unique_item[:description], :ilvl => ilvl, :slot => slot }
 	  				  @inventory[slot] = Item.new(ilvl, slot, unique_item[:name], unique_item[:description])
 	  			  end
