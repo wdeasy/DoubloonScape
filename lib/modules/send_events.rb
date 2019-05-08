@@ -39,6 +39,9 @@ module Bot
     else
       send_chat("#{value[:captain]} found a common #{value[:name]}[#{value[:ilvl]}].")
     end
+    if value[:better] == false
+      send_chat("It's worse than what you have, so you throw it into the ocean.")
+    end    
   end
 
   def self.contest_event(value)
@@ -185,6 +188,9 @@ module Bot
       send_chat("\"#{value[:description]}\"")
     else
       send_chat("It contained a common #{value[:name]}[#{value[:ilvl]}].")
+    end
+    if value[:better] == false
+      send_chat("It's worse than what you have, so you throw it into the ocean.")
     end
   end
 

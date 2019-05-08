@@ -54,7 +54,7 @@ module DoubloonScape
 
   #items
   ITEM_CHANCE        = 1   #percent
-  ITEM_LEVEL         = 1.5 #percent
+  ITEM_LEVEL         = 5   #x level
   UNIQUE_ITEM_CHANCE = 20  #percent
   UNIQUE_ITEM_MAX    = 3   #percent
   BETTER_ITEM_CHANCE = 1.4 #percent

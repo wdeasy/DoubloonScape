@@ -5,24 +5,17 @@ module Bot
     while true do
       Thread.stop if $exit
       if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false && DOUBLOONSCAPE.locked == false
-        log "update last tick" if DOUBLOONSCAPE.debug
         last_tick = Time.now
         if BOT.connected?
-          log "update captain status" if DOUBLOONSCAPE.debug
           DOUBLOONSCAPE.update_captains_status(get_members_status)
-          log "do turn" if DOUBLOONSCAPE.debug
           send_events(DOUBLOONSCAPE.do_turn)
-          log "update topic" if DOUBLOONSCAPE.debug
           update_topic(DOUBLOONSCAPE.status)
           disc_count = 0
-
-          Bot.log "Time elapsed #{(Time.now - last_tick).round(2)} seconds." if DOUBLOONSCAPE.debug
+          Bot.log "Time elapsed #{(Time.now - last_tick).round(2)} seconds."
         else
           disc_count+=1
           Bot.log "Skipping tick. Bot is disconnected. [#{disc_count}]"
         end
-      else
-        #log "#{Time.now - last_tick} <= #{DOUBLOONSCAPE.seconds}" if DOUBLOONSCAPE.debug
       end
       sleep 0.1
     end
