@@ -197,6 +197,21 @@ module DoubloonScape
       return item
     end
 
+    def give_item(lvl=@level)
+      item = @inv.make_item(lvl)
+      unless item.empty?
+        item[:captain] = @name
+        if item[:quality] == :unique
+          @achieves.add_value('uniques', 1)
+          if item[:name] == "Barnacle-Covered Pegleg"
+            @achieves.add_value('pegleg', 1)
+          end
+        end
+        @achieves.set_values('ilvl', @inv.ilvl)
+      end
+      return item
+    end
+
     def roll
       @inv.ilvl + @achieves.count
     end

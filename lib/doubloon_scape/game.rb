@@ -40,9 +40,6 @@ module DoubloonScape
       #save queue
       @save_queue = Array.new()
       @chain_updated = false
-
-      #debug
-      @debug = true
     end
 
     def captain(id)
@@ -279,69 +276,44 @@ module DoubloonScape
     end
 
     def do_turn
-      log "start of turn" if @debug
       events = {}
       if @events.in_whirlpool == true
-        log "whirlpool escape check" if @debug
         events[:whirlpool_escape] = whirlpool_escape_check
       elsif @events.in_raid == true
-        log "raid check" if @debug
         events[:in_raid] = raid_check
       else
-        log "set current captain" if @debug
         capn = current_captain
         unless @pause == true
-          log "brig check" if @debug
           brig_check
-          log "whirlpool check" if @debug
           events[:whirlpool] = @events.whirlpool_check
-          #log "raid check" if @debug
-          #events[:raid] = @events.raid_check
-          log "holiday check" if @debug
+          events[:raid] = @events.raid_check
           events[:holiday] = @events.holiday_check
-          log "event check" if @debug
           events[:event] = event_check(capn)
           unless capn.nil?
-            log "update captain" if @debug
             update_captain(capn)
             if @captains[capn].status == :offline
-              log "captain offline" if @debug
               if @captains[capn].offline == 1
                 events[:offline_captain] = {:offline => true}
               end
             else
-              log "pickpocket check" if @debug
               events[:pickpocket] = pickpocket_check(capn)
-              log "battle check" if @debug
               events[:battle] = battle_check(capn)
-              log "keelhaul check" if @debug
               events[:keelhaul] = keelhaul_check(capn)
-              log "treasure check" if @debug
               events[:treasure] = treasure_check(capn)
-              log "item check" if @debug
               events[:item] = @captains[capn].item_check
-              log "level check" if @debug
               events[:level] = @captains[capn].level_check
-              log "lootbox check" if @debug
               events[:lootbox] = lootbox_check(capn)
               unless events[:level].nil?
-                log "tailwind check" if @debug
                 events[:tailwind] = tailwind_check(capn)
               end
-              log "record check" if @debug
               events[:record] = @captains[capn].record_check
             end
-            log "achieve check" if @debug
             events[:achieve] = @captains[capn].achieve_check
-            log "add to queue" if @debug
             add_to_queue(capn)
           end
         end
       end
-
-      log "process queue" if @debug
       process_queue
-      log "return events" if @debug
       return events
     end
 
@@ -563,13 +535,13 @@ module DoubloonScape
 
     def lootbox_check(cur)
       loot = Hash.new
+      unless @captains[cur].inv.ilvl >= DoubloonScape::MAX_LEVEL * @captains[cur].level * @captains[cur].inv.inventory.count
         if rand(1000) < (DoubloonScape::LOOTBOX_CHANCE*10) && @captains[cur].gold > DoubloonScape::LOOTBOX_PRICE
-          until !loot.empty?
-            loot = @captains[cur].item_check(DoubloonScape::MAX_LEVEL)
-          end
+          loot = @captains[cur].give_item(DoubloonScape::MAX_LEVEL)
           @captains[cur].take_gold(DoubloonScape::LOOTBOX_PRICE)
           @bank += DoubloonScape::LOOTBOX_PRICE
         end
+      end
       return loot
     end
 
@@ -632,12 +604,14 @@ module DoubloonScape
       cur = current_captain
       if @paused
         return :paused
+      elsif @events.in_raid
+        return :inraid
+      elsif @events.in_whirlpool
+        return :inwhirlpool
       elsif cur.nil?
         return :nocaptain
       elsif @captains[cur].status == :offline
         return :captainoffline
-      elsif @events.in_whirlpool
-        return :inwhirlpool
       else
         capn = @captains[cur]
         return {:level => capn.level, :gold => capn.gold, :current => capn.current, :next => capn.next}
@@ -795,11 +769,14 @@ module DoubloonScape
     def raid_info
       info = {}
 
-      unless @raid.current_boss.nil?
-        info[:boss_name] = @raid.current_boss.name
-        info[:boss_hp] = @raid.current_boss.hp < 1 ? 0 : @raid.current_boss.hp
+      unless @raid.nil?
+        unless @raid.current_boss.nil?
+          info[:boss_name] = @raid.current_boss[:name]
+          info[:boss_hp] = @raid.current_boss[:hp]
+          info[:boss_current_hp] = @raid.current_boss[:current_hp] < 1 ? 0 : @raid.current_boss[:current_hp]
+        end
+        info[:captains_alive] = @raid.raiders.count
       end
-      info[:captains_alive] = @raid.raiders.count
 
       return info
     end
@@ -811,29 +788,29 @@ module DoubloonScape
 
       raid = @raid.do_turn
 
-      if raid[:current_boss_hp] < 1
-        raid[:gold] = Array.new
-        raid[:loot] = Array.new
-        raid[:xp]   = Array.new
+      if raid[:status] == :in_progress
+        if raid[:current_boss_hp] < 1
+          raid[:gold] = Array.new
+          raid[:loot] = Array.new
+          raid[:xp]   = Array.new
 
-        raid[:raiders].each do |raider|
-          #give xp
-          amt = @captains[raider.id].next_level * (DoubloonScape::RAID_WIN_AMOUNT * 0.01)
-          @captains[raider.id].give_xp(amt)
-          raid[:xp].push(:name => raider.name, :amount => amt)
+          raid[:raiders].each do |raider|
+            #give xp
+            amt = @captains[raider[:id]].next_level * (DoubloonScape::RAID_WIN_LVL_AMOUNT * 0.01)
+            @captains[raider[:id]].give_xp(amt)
+            raid[:xp].push(:name => raider[:name], :amount => amt)
 
-          #give item
-          loot = Hash.new
-          until !loot.empty?
-            loot = @captains[raider.id].item_check(DoubloonScape::MAX_LEVEL)
+            #give item
+            loot = Hash.new
+            loot = @captains[raider[:id]].give_item(DoubloonScape::MAX_LEVEL)
+            raid[:loot].push(loot)
+
+            #give gold
+            amt = rand((@captains[raider[:id]].gold * ((DoubloonScape::RAID_WIN_GOLD_AMOUNT*10)/1000)).floor.to_i)
+            @captains[raider[:id]].give_gold(amt)
+            raid[:gold].push(:name => raider[:name], :amount => amt)
+            add_to_queue(raider[:id])
           end
-          raid[:loot].push(loot)
-
-          #give gold
-          amt = rand(DoubloonScape::RAID_GOLD_AMOUNT)
-          @captains[raider.id].give_gold(amt)
-          raid[:gold].push(:name => raider.name, :amount => amt)
-          add_to_queue(raider.id)
         end
       end
 
@@ -849,15 +826,11 @@ module DoubloonScape
       end
 
       if raid[:status] == :won || raid[:status] == :lost
-        @events.in_raid == false
+        @events.in_raid = false
         @raid = nil
       end
 
       return raid
-    end
-
-    def debug
-      return @debug
     end
 
   end

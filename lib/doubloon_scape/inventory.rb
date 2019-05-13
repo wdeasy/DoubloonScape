@@ -89,6 +89,38 @@ module DoubloonScape
 
 	  end
 
+    def make_item(level)
+      item = {}
+			min = level-DoubloonScape::MIN_ITEM_LEVEL < 1 ? 1 : level-DoubloonScape::MIN_ITEM_LEVEL
+
+			ilvl = rand(1..(level * DoubloonScape::MAX_ITEM_LEVEL)).floor.to_i
+			slot = ['Head', 'Chest', 'Hands', 'Legs', 'Pet', 'Trinket', 'Main Hand', 'Off Hand'].sample
+
+			item_name = @common[slot][:names].sample
+			item_qlty = :common
+			item_desc = nil
+
+			if rand(100) < DoubloonScape::UNIQUE_ITEM_CHANCE
+				unique = @unique.reject {|x| x[:slot] != slot }
+				unique.reject! {|x| level < x[:level]}
+				unique_item = unique.sample
+				unless unique_item.nil?
+					item_name = unique_item[:name]
+					item_qlty = :unique
+					item_desc = unique_item[:description]
+				end
+			end
+
+			if ilvl > inventory[slot].ilvl
+				@inventory[slot] = Item.new(ilvl, slot, item_name, item_desc)
+				item = {:quality => item_qlty, :name => item_name, :description => item_desc, :ilvl => ilvl, :better => true}
+			else
+				item = {:quality => item_qlty, :name => item_name, :description => item_desc, :ilvl => ilvl, :better => false}
+			end
+
+			return item
+		end
+
 	  def item_check(level, tailwind=1)
 	  	item = {}
 
@@ -98,30 +130,7 @@ module DoubloonScape
 			end
 
 	  	if rand(100/multiplier) < (DoubloonScape::ITEM_CHANCE * tailwind)
-	  		ilvl = rand(1..(level * DoubloonScape::ITEM_LEVEL)).floor.to_i
-	  		slot = ['Head', 'Chest', 'Hands', 'Legs', 'Pet', 'Trinket', 'Main Hand', 'Off Hand'].sample
-
-				item_name = @common[slot][:names].sample
-				item_qlty = :common
-				item_desc = nil
-
-				if rand(100) < DoubloonScape::UNIQUE_ITEM_CHANCE
-					unique = @unique.reject {|x| x[:slot] != slot }
-					unique.reject! {|x| level < x[:level]}
-					unique_item = unique.sample
-					unless unique_item.nil?
-						item_name = unique_item[:name]
-						item_qlty = :unique
-						item_desc = unique_item[:description]
-					end
-				end
-
-				if ilvl > inventory[slot].ilvl
-					@inventory[slot] = Item.new(ilvl, slot, item_name, item_desc)
-					item = {:quality => item_qlty, :name => item_name, :description => item_desc, :ilvl => ilvl, :better => true}
-				else
-					item = {:quality => item_qlty, :name => item_name, :description => item_desc, :ilvl => ilvl, :better => false}
-	  		end
+        item = make_item(level)
 	  	end
 	  	return item
 	  end
@@ -139,11 +148,11 @@ module DoubloonScape
 	  	when 'Admiral Nelson'
 	  		battle[:item_name] = 'Nelson\'s Folly'
 				battle[:item_description] = 'Stolen from the Dreaded Rear Admiral himself.'
-	  		@inventory['Off Hand'] = Item.new(rand(200..300), 'Off Hand', battle[:item_name], battle[:item_description])
+	  		@inventory['Off Hand'] = Item.new(((level+1) * DoubloonScape::ITEM_LEVEL), 'Off Hand', battle[:item_name], battle[:item_description])
 	  	when 'The Kraken'
 	  		battle[:item_name] = 'Tentacle Whip'
 				battle[:item_description] = 'Fashioned from a dismembered Kraken limb.'
-	  		@inventory['Main Hand'] = Item.new(rand(200..300), 'Main Hand', battle[:item_name], battle[:item_description])
+	  		@inventory['Main Hand'] = Item.new(((level+1) * DoubloonScape::ITEM_LEVEL), 'Main Hand', battle[:item_name], battle[:item_description])
 	  	end
 	  	return battle
 	  end

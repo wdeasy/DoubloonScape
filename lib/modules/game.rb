@@ -21,23 +21,46 @@ module Bot
     end
   end
 
+  def self.health_bar(current, max, width)
+    divisor = (max.to_f / width)
+    life = (current.to_f / divisor).ceil.to_i
+
+    i=0
+
+    healthbar = "|"
+    while i < life do
+      healthbar += "█"
+      i+=1
+    end
+
+    while i < width do
+      healthbar += "░"
+      i+=1
+    end
+    healthbar += "|"
+
+    return healthbar
+  end
+
   def self.update_topic(status)
     case status
     when :paused
       set_topic("This ship is anchored in time.")
-    when :nocaptain
-      set_topic("Who is the Captain of this Ship!?")
-    when :captainoffline
-      set_topic("#{DOUBLOONSCAPE.current_name('landlubber')} has abandoned ship!")
     when :inwhirlpool
       set_topic("The ship is caught in a whirlpool!")
     when :inraid
       raid_info = DOUBLOONSCAPE.raid_info
-      if raid_info[:current_boss].nil?
-        set_topic("Captains Alive: #{raid_info[:captains_alive]}")
+      if raid_info[:boss_name].nil?
+        set_topic("The ship is on a raid!")
       else
-        set_topic("Current Boss: #{raid_info[:boss_name]}. HP: #{raid_info[:boss_hp]}. Captains Alive: #{raid_info[:captains_alive]}")
+        hb = health_bar(raid_info[:boss_current_hp],raid_info[:boss_hp],27)
+        percent = ((raid_info[:boss_current_hp].to_f/raid_info[:boss_hp]).round(2)*100.ceil).to_i
+        set_topic("#{raid_info[:boss_name]} #{hb} #{percent}%")
       end
+    when :nocaptain
+      set_topic("Who is the Captain of this Ship!?")
+    when :captainoffline
+      set_topic("#{DOUBLOONSCAPE.current_name('landlubber')} has abandoned ship!")
     else
       level = status[:level]
       gold  = status[:gold].floor.to_i
