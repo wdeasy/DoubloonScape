@@ -145,7 +145,7 @@ module DoubloonScape
               crit = true
               attack = (raider[:damage] * (DoubloonScape::CRIT_STRIKE_DAMAGE/100)).floor.to_i
             else
-              attack = rand(raider[:damage])
+              attack = rand((raider[:damage]/2)..raider[:damage]).ceil.to_i
             end
             @bosses[index][:current_hp] -= attack
             events[:current_boss_hp] = @bosses[index][:current_hp]
