@@ -286,7 +286,7 @@ module DoubloonScape
         unless @pause == true
           brig_check
           events[:whirlpool] = @events.whirlpool_check
-          events[:raid] = @events.raid_check
+          #events[:raid] = @events.raid_check
           events[:holiday] = @events.holiday_check
           events[:event] = event_check(capn)
           unless capn.nil?
