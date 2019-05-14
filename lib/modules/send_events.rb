@@ -132,7 +132,9 @@ module Bot
   def self.in_raid_event(value)
     msg = ""
     if value[:status] == :in_progress
-      send_chat("The raiders are pillaging the town when #{value[:current_boss]} stands in their way!")
+      unless value[:new_boss].nil? || value[:new_boss].empty?
+        send_chat("The raiders are pillaging the town when #{value[:new_boss]} stands in their way!")
+      end
       #list attacks
       value[:attacks].each do |attack|
         if attack[:damage] == 0

@@ -101,13 +101,13 @@ module DoubloonScape
   #raid
   RAID_COOLDOWN           = 1440   #minutes
   RAID_CHANCE             = 1.0    #percent
-  BOSS_HP_MODIFIER        = 1      #multiplier
+  BOSS_HP_MODIFIER        = 0.5    #multiplier
   BOSS_LVL_MODIFIER       = 5      #number
   RAID_BOSS_NUMBER        = 1      #number
   RAID_BOSS_ATTACKS       = 1      #number
-  RAID_BOSS_DAMAGE        = 25.0   #percent
+  RAID_BOSS_DAMAGE        = 100.0   #percent
   CRIT_STRIKE_CHANCE      = 5.0    #percent
-  CRIT_STRIKE_DAMAGE      = 200.0  #percent
+  CRIT_STRIKE_DAMAGE      = 300.0  #percent
   RAID_WIN_LVL_AMOUNT     = 10.0   #percent
   RAID_WIN_GOLD_AMOUNT    = 100.0  #percent
 end

@@ -108,11 +108,11 @@ module DoubloonScape
           if place == 'atlantis'
             unit = :goldxp
             modifier = :buff
-            amount = rand(1..DoubloonScape::ATLANTIS_MOD_MAX)
+            amount = rand(1..DoubloonScape::ATLANTIS_MOD_MAX).ceil.to_i
           else
             unit = :time
             modifier = rand(2) == 0 ? :buff : :curse
-            amount = rand(1..DoubloonScape::BERMUDA_MOD_MAX)
+            amount = rand(1..DoubloonScape::BERMUDA_MOD_MAX).ceil.to_i
           end
 
           if place == 'atlantis'

@@ -64,7 +64,6 @@ module DoubloonScape
         @bosses.push(bosses.sample)
         i+=1
       end
-      @current_boss = @bosses.sample
     end
 
     def calc_stats(capns)
@@ -106,6 +105,7 @@ module DoubloonScape
         #load a new boss if there isn't one
         if @current_boss.nil?
           @current_boss = @bosses.sample
+          events[:new_boss] = @current_boss[:name]
         end
 
         @status = :in_progress
