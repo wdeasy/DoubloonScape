@@ -337,7 +337,7 @@ module DoubloonScape
     end
 
     def denier_check(cur=current_captain, pre=previous_captain)
-      if @captains[pre].next_level - @captains[pre].xp < 2
+      if @captains[pre].next_level - @captains[pre].xp < 2 && @captains[pre].level < DoubloonScape::MAX_LEVEL
         @captains[cur].achieves.add_value('denies', 1)
       end
     end

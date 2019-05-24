@@ -136,7 +136,7 @@ module DoubloonScape
         events[:current_boss_hp] = @bosses[index][:current_hp]
         @raiders.each do |raider|
           events[:raiders].push(raider)
-          unless @bosses[index][:current_hp] < 1
+          unless @bosses.nil? || @bosses[index].nil? || @bosses[index][:current_hp] < 1
             crit = false
             roll = rand(@bosses[index][:lvl])
             if roll > raider[:lvl]
