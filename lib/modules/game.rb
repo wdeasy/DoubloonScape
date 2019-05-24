@@ -67,7 +67,11 @@ module Bot
       time  = minutes(status[:current])
       ttl   = (((status[:next] / DOUBLOONSCAPE.amount) * DOUBLOONSCAPE.seconds)/60).ceil.to_i
       ttl   = ttl >= 0 ? ttl : 0
-      set_topic("Level: #{level} Gold: #{gold} Time as Captain: #{time} min. Next Level: #{ttl} min.")
+      topic = "Level: #{level} Gold: #{gold} Time as Captain: #{time} min."
+      unless level == DoubloonScape::MAX_LEVEL
+         topic << " Next Level: #{ttl} min."
+      end
+      set_topic(topic)
     end
   end
 
