@@ -5,6 +5,12 @@ module Bot
     while true do
       Thread.stop if $exit
       if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false && DOUBLOONSCAPE.locked == false
+        if Time.now.day != last_tick.day
+          gc_start = Time.now
+          GC.start
+          Bot.log "Garbage Collection #{Time.now - gc_start} seconds."
+        end
+
         last_tick = Time.now
         if BOT.connected?
           DOUBLOONSCAPE.update_captains_status(get_members_status)
