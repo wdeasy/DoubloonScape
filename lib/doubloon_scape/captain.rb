@@ -145,6 +145,9 @@ module DoubloonScape
         @xp = @xp - @next_level
         @next_level = calc_level_up
         @achieves.set_values('levels', @level)
+        if @level == DoubloonScape::MAX_LEVEL
+          @achieves.set_values('max', 1)
+        end
         return {:name => @name, :level => @level}
       else
         return nil
@@ -188,6 +191,7 @@ module DoubloonScape
         item[:captain] = @name
         if item[:quality] == :unique
           @achieves.add_value('uniques', 1)
+          @achieves.set_values('slots', @inv.count_uniques)
           if item[:name] == "Barnacle-Covered Pegleg"
             @achieves.add_value('pegleg', 1)
           end
@@ -203,6 +207,7 @@ module DoubloonScape
         item[:captain] = @name
         if item[:quality] == :unique
           @achieves.add_value('uniques', 1)
+          @achieves.set_values('slots', @inv.count_uniques)
           if item[:name] == "Barnacle-Covered Pegleg"
             @achieves.add_value('pegleg', 1)
           end

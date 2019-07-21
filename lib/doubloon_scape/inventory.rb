@@ -156,5 +156,15 @@ module DoubloonScape
 	  	end
 	  	return battle
 	  end
+
+		def count_uniques
+			num = 0
+			@inventory.each do |inv|
+				unless inv[:description].include? "common"
+					num+=1
+				end
+			end
+			return num
+		end
   end
 end

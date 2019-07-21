@@ -84,7 +84,8 @@ module DoubloonScape
         end
 
         firstplace = [165489755620900864,
-                      164140817718575106]
+                      164140817718575106,
+                      195331188540309505]
         if firstplace.include? id
           @captains[id].achieves.add_value('firstplace', 1)
         end
@@ -442,6 +443,7 @@ module DoubloonScape
       unless contest.empty?
         if contest[:success] == true
           @brig[cur] = Time.now + DoubloonScape::BRIG_DURATION.minutes
+          @captains[cur].achieves.add_value('brig', 1)
           case contest[:event]
           when :mutiny
             mutineers.each do |id, capn|
@@ -540,6 +542,7 @@ module DoubloonScape
           loot = @captains[cur].give_item(DoubloonScape::MAX_LEVEL)
           @captains[cur].take_gold(DoubloonScape::LOOTBOX_PRICE)
           @bank += DoubloonScape::LOOTBOX_PRICE
+          @captains[cur].achieves.add_value('loot', 1)
         end
       end
       return loot
@@ -560,6 +563,7 @@ module DoubloonScape
               battle = @captains[cur].inv.battle_item(battle)
               if !battle[:item_name].nil?
                 @captains[cur].achieves.add_value('uniques', 1)
+                @captains[cur].achieves.set_values('slots', @inv.count_uniques)
                 @captains[cur].achieves.set_values('ilvl', @captains[cur].inv.ilvl)
               end
             end

@@ -12,14 +12,6 @@ module DoubloonScape
         @tag = tag
       end
 
-      #next season add achievements for:
-      #times in brig
-      #lootboxes looted
-      #max level achievement
-      #prestige?
-      #unique item in all slots
-      #x number of uniques equipped
-
       def is_active
         active = false
         case @activation
@@ -320,6 +312,33 @@ module DoubloonScape
       define_property('ilvl500', 0, ACTIVE_IF_GREATER_THAN, 499, 'ilvl')
       define_property('ilvl1000', 0, ACTIVE_IF_GREATER_THAN, 999, 'ilvl')
       define_property('ilvl2500', 0, ACTIVE_IF_GREATER_THAN, 2499, 'ilvl')
+
+      #times brigged
+      define_property('brig1', 0, ACTIVE_IF_GREATER_THAN, 0, 'brig')
+      define_property('brig5', 0, ACTIVE_IF_GREATER_THAN, 4, 'brig')
+      define_property('brig25', 0, ACTIVE_IF_GREATER_THAN, 24, 'brig')
+      define_property('brig50', 0, ACTIVE_IF_GREATER_THAN, 49, 'brig')
+      define_property('brig100', 0, ACTIVE_IF_GREATER_THAN, 99, 'brig')
+
+      #lootboxes looted
+      define_property('loot1', 0, ACTIVE_IF_GREATER_THAN, 0, 'loot')
+      define_property('loot50', 0, ACTIVE_IF_GREATER_THAN, 49, 'loot')
+      define_property('loot250', 0, ACTIVE_IF_GREATER_THAN, 249, 'loot')
+      define_property('loot500', 0, ACTIVE_IF_GREATER_THAN, 499, 'loot')
+      define_property('loot1000', 0, ACTIVE_IF_GREATER_THAN, 999, 'loot')
+
+      #max level
+      define_property('max', 0, ACTIVE_IF_GREATER_THAN, 0, 'max')
+
+      #unique items eqipped
+      define_property('slots1', 0, ACTIVE_IF_GREATER_THAN, 0, 'slots')
+      define_property('slots2', 0, ACTIVE_IF_GREATER_THAN, 1, 'slots')
+      define_property('slots3', 0, ACTIVE_IF_GREATER_THAN, 2, 'slots')
+      define_property('slots4', 0, ACTIVE_IF_GREATER_THAN, 3, 'slots')
+      define_property('slots5', 0, ACTIVE_IF_GREATER_THAN, 4, 'slots')
+      define_property('slots6', 0, ACTIVE_IF_GREATER_THAN, 5, 'slots')
+      define_property('slots7', 0, ACTIVE_IF_GREATER_THAN, 6, 'slots')
+      define_property('slots8', 0, ACTIVE_IF_GREATER_THAN, 7, 'slots')
     end
 
     def load_achievements
@@ -441,13 +460,40 @@ module DoubloonScape
       define_achievement("THE DREADED REAR ADMIRAL", "Defeat Admiral Nelson.", ['nelson'], true)
       define_achievement("VANQUISHER", "Defeat all enemies at sea.", ['kraken','mobydick','leviathan','hydra','queen','nelson'], true)
 
-      #uncomment next season, will break current season
       #ilvl
       define_achievement("CLAD", "Have an iLVL over 100.", ['ilvl100'], true)
       define_achievement("ARMED", "Have an iLVL over 250.", ['ilvl250'], true)
       define_achievement("SUITED", "Have an iLVL over 500.", ['ilvl500'], true)
       define_achievement("ADORNED", "Have an iLVL over 1000.", ['ilvl1000'], true)
       define_achievement("BEDECKED", "Have an iLVL over 2500.", ['ilvl2500'], true)
+
+      #uncomment next season, will break current season
+      #brig
+      define_achievement("BRIGGED", "Get sent to the brig.", ['brig1'], true)
+      define_achievement("REPEAT OFFENDER", "Get sent to the brig 5 times.", ['brig5'], true)
+      define_achievement("DETAINED", "Get sent to the brig 25 times.", ['brig25'], true)
+      define_achievement("MENACE TO SOCIETY", "Get sent to the brig 50 times.", ['brig50'], true)
+      define_achievement("LIFE SENTENCE", "Get sent to the brig 100 times.", ['brig100'], true)
+
+      #ilvl
+      define_achievement("GAMBLER", "Loot a lootbox!", ['loot1'], true)
+      define_achievement("LOOTER", "Loot 50 lootboxes!", ['loot50'], true)
+      define_achievement("UNBOXER", "Loot 250 lootboxes!", ['loot250'], true)
+      define_achievement("LUCKER", "Loot 500 lootboxes!", ['loot500'], true)
+      define_achievement("ADDICT", "Loot 1000 lootboxes!", ['loot1000'], true)
+
+      #max level
+      define_achievement("ENDGAME", "Reach max level.", ['max'], true)
+
+      #uniques equipped
+      define_achievement("RARE", "Have one unique item equipped.", ['slots1'], true)
+      define_achievement("WELL-DRESSED", "Have two unique items equipped.", ['slots2'], true)
+      define_achievement("OUTFITTED", "Have three unique items equipped.", ['slots3'], true)
+      define_achievement("BEDECKED", "Have four unique items equipped.", ['slots4'], true)
+      define_achievement("STRONK", "Have five unique items equipped.", ['slots5'], true)
+      define_achievement("TWINK", "Have six unique items equipped.", ['slots6'], true)
+      define_achievement("LEGENDARY", "Have seven unique items equipped.", ['slots7'], true)
+      define_achievement("FULL BUILD", "Have all unique items equipped!", ['slots8'], true)
     end
   end
 end
