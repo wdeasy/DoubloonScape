@@ -160,7 +160,7 @@ module DoubloonScape
 		def count_uniques
 			num = 0
 			@inventory.each do |key, val|
-				unless val.description.include? "common"
+				if !val[:description].nil? && !val[:description].include? "common"
 					num+=1
 				end
 			end
