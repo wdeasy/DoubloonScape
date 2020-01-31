@@ -5,6 +5,20 @@ module Bot
     while true do
       Thread.stop if $exit
       if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false && DOUBLOONSCAPE.locked == false
+        if (Date.today - $date) == CONFIG.uptime
+          Bot.log "A bescheduled restartening, it seems."
+          Bot.send_chat("Swabbin' the poop deck!")
+          $exit = true
+          DOUBLOONSCAPE.stop
+          Bot.remove_captains
+          unless DOUBLOONSCAPE.current_captain.nil?
+            Bot.set_name(DOUBLOONSCAPE.current_captain, DOUBLOONSCAPE.current_name('landlubber'))
+          end
+          Bot.set_topic(nil)
+          BOT.game = nil
+          exit 0
+        end
+
         if Time.now.day != last_tick.day
           gc_start = Time.now
           GC.start
