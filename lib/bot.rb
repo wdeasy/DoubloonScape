@@ -2,7 +2,6 @@ require 'bundler/setup'
 require 'discordrb'
 require 'thread'
 require 'yaml'
-require 'date'
 require_relative './doubloon_scape'
 
 module Bot
@@ -30,7 +29,7 @@ module Bot
   DOUBLOONSCAPE.load_captains
   $game = nil
   $exit = false
-  $date = Date.today
+  $time = Time.now
 
   #bot commands
   module DiscordCommands; end

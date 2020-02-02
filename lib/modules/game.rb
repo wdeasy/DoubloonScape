@@ -5,7 +5,7 @@ module Bot
     while true do
       Thread.stop if $exit
       if (Time.now - last_tick) >= DOUBLOONSCAPE.seconds && DOUBLOONSCAPE.pause == false && DOUBLOONSCAPE.locked == false
-        if (Date.today - $date) == CONFIG.uptime
+        if ((Time.now - $start_time).to_i / (24 * 60 * 60)) >= CONFIG.uptime
           Bot.log "A bescheduled restartening, it seems."
           Bot.send_chat("Swabbin' the poop deck!")
           $exit = true
